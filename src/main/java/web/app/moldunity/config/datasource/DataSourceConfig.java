@@ -13,7 +13,7 @@ public class DataSourceConfig {
     private String USERNAME;
     @Value("${spring.datasource.password}")
     private String PASSWORD;
-    private final String JDBC_URL = "jdbc:mysql://localhost:3306/anonim_test";
+    private final String JDBC_URL = "jdbc:mysql://localhost:3306/moldunity_test";
     private final String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
     private final String TRANSACTION_ISOLATION = "TRANSACTION_REPEATABLE_READ";
     private final Long CONNECTION_TIMEOUT = 30_000L;
