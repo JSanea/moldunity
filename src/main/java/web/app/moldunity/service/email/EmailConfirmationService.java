@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import web.app.moldunity.entity.user.User;
 import web.app.moldunity.util.Expiry;
 import web.app.moldunity.util.ExpiryMap;
-import web.app.moldunity.util.GenerateKey;
+import web.app.moldunity.util.KeyGenerator;
 
 import java.util.Optional;
 
@@ -27,7 +27,7 @@ public class EmailConfirmationService {
     }
 
     public boolean sendEmail(@NotNull User user){
-        String key = GenerateKey.generate();
+        String key = KeyGenerator.generate();
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){
