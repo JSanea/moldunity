@@ -1,9 +1,7 @@
 package web.app.moldunity.entity.article;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +15,8 @@ public abstract class ArticleCommentReply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 512)
+    @NotEmpty
     private String txt;
 
     private LocalDateTime createdAt;

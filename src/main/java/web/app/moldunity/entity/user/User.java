@@ -48,7 +48,7 @@ public class User {
 
     private LocalDate lastLogonDate;
 
-    /******************* Furniture *******************/
+    /************************** Furniture **************************/
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<KitchenArticle> kitchenArticles;
 
