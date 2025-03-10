@@ -1,7 +1,5 @@
 package web.app.moldunity.entity.user;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 32)
+    @Column(unique = true, length = 16)
     @NotEmpty
     private String username;
 
@@ -28,8 +26,7 @@ public class User {
     @NotEmpty
     private String email;
 
-    @Column(unique = true, length = 256)
-    @NotEmpty
+    @Column(length = 256)
     private String password;
 
     @NotEmpty
@@ -38,7 +35,12 @@ public class User {
     @NotEmpty
     private String country;
 
+    @NotEmpty
+    private String location;
+
     private LocalDate createdAt;
+
+    private LocalDate lastLogonDate;
 }
 
 

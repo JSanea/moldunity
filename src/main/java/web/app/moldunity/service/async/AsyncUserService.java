@@ -23,12 +23,12 @@ public class AsyncUserService {
     }
 
     @Async
-    public CompletableFuture<Boolean> existUsername(String username){
+    public CompletableFuture<Boolean> asyncExistUsername(String username){
         return CompletableFuture.completedFuture(userService.existUsername(username));
     }
 
     @Async
-    public CompletableFuture<Boolean> existEmail(String email){
+    public CompletableFuture<Boolean> asyncExistEmail(String email){
         return CompletableFuture.completedFuture(userService.existEmail(email));
     }
 }

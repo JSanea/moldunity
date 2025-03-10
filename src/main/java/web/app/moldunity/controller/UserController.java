@@ -33,9 +33,9 @@ public class UserController {
     )
     public ResponseEntity<String> confirmUser(@RequestBody User user){
         try {
-            if(asyncUserService.existUsername(user.getUsername()).get())
+            if(asyncUserService.asyncExistUsername(user.getUsername()).get())
                 return new ResponseEntity<>("Username Already Exist", HttpStatus.NOT_ACCEPTABLE);
-            if(asyncUserService.existEmail(user.getEmail()).get())
+            if(asyncUserService.asyncExistEmail(user.getEmail()).get())
                 return new ResponseEntity<>("Email Already Exist", HttpStatus.NOT_ACCEPTABLE);
 
         } catch (ExecutionException | InterruptedException e) {
