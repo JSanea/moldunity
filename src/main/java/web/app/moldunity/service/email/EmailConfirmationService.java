@@ -27,7 +27,7 @@ public class EmailConfirmationService {
     }
 
     public boolean sendEmail(@NotNull User user){
-        String key = KeyGenerator.generate();
+        String key = KeyGenerator.generate(32);
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){

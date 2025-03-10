@@ -1,4 +1,6 @@
 package web.app.moldunity.entity.electronics.monitor;
 
-public class MonitorAdvertComment {
+import web.app.moldunity.entity.AdvertComment;
+
+public class MonitorAdvertComment extends AdvertComment {
 }

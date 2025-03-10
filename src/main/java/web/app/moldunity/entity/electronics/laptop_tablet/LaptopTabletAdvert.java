@@ -12,7 +12,7 @@ import web.app.moldunity.entity.Advert;
 @Getter
 @Setter
 @Table(name = "laptops_tablets")
-public class LaptopTableAdvert extends Advert {
+public class LaptopTabletAdvert extends Advert {
     @NotEmpty
     private String brand;
     @NotEmpty
