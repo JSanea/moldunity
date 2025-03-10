@@ -14,18 +14,19 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import web.app.moldunity.security.MainAuthenticationProvider;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig {
     private final Integer BCRYPT_STRENGTH = 12;
-//    private final MainAuthenticationProvider mainAuthenticationProvider;
-//
-//    @Autowired
-//    public SecurityConfig(@Lazy MainAuthenticationProvider mainAuthenticationProvider) {
-//        this.mainAuthenticationProvider = mainAuthenticationProvider;
-//    }
+    private final MainAuthenticationProvider mainAuthenticationProvider;
+
+    @Autowired
+    public SecurityConfig(@Lazy MainAuthenticationProvider mainAuthenticationProvider) {
+        this.mainAuthenticationProvider = mainAuthenticationProvider;
+    }
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -50,7 +51,7 @@ public class SecurityConfig {
                         //.maxSessionsPreventsLogin(true))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                //.authenticationManager(new ProviderManager(mainAuthenticationProvider))
+                .authenticationManager(new ProviderManager(mainAuthenticationProvider))
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

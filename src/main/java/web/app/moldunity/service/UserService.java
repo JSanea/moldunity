@@ -29,6 +29,11 @@ public class UserService extends BaseJpaService<User, Long> {
     }
 
     @Transactional(readOnly = true)
+    public User findByName(String username){
+        return userRepository.findByName(username).orElseGet(User::new);
+    }
+
+    @Transactional(readOnly = true)
     public Boolean existUsername(String username){
         return username.equals(userRepository.existUsername(username));
     }

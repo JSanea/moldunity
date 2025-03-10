@@ -31,7 +31,13 @@ public abstract class Advert {
     private LocalDateTime createdAt;
 
     @NotEmpty
+    private LocalDateTime updateAt;
+
+    @NotEmpty
     private String country;
+
+    @NotEmpty
+    private String location;
 
     @Column(length = 1024)
     @NotEmpty
