@@ -1,4 +1,4 @@
-package web.app.moldunity.entity;
+package web.app.moldunity.entity.article;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class AdvertComment {
+public abstract class ArticleCommentReply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

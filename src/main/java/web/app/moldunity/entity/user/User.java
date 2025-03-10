@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
+import web.app.moldunity.entity.furniture.kitchen.KitchenArticle;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,6 +47,13 @@ public class User {
     private LocalDate createdAt;
 
     private LocalDate lastLogonDate;
+
+    /******************* Furniture *******************/
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<KitchenArticle> kitchenArticles;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<BathroomArticle> bathroomArticles;
 }
 
 
