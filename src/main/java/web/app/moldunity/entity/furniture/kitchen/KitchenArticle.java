@@ -1,28 +1,13 @@
 package web.app.moldunity.entity.furniture.kitchen;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import web.app.moldunity.entity.article.Article;
-import web.app.moldunity.entity.user.User;
+import lombok.Data;
+import web.app.moldunity.entity.furniture.FurnitureArticle;
 
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "kitchen")
-public class KitchenArticle extends Article {
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<KitchenArticleComment> comments;
+public class KitchenArticle extends FurnitureArticle<KitchenArticleComment, KitchenArticleImage, KitchenArticleView> {
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<KitchenArticleImage> images;
-
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<KitchenArticleImage> views;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

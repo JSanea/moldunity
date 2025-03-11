@@ -1,21 +1,17 @@
 package web.app.moldunity.entity.furniture.bathroom;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import web.app.moldunity.entity.article.ArticleComment;
+import web.app.moldunity.entity.furniture.FurnitureComment;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "bathroom_comments")
-public class BathroomArticleComment extends ArticleComment {
-    @OneToMany(mappedBy = "comment", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<BathroomArticleCommentReply> replies;
+public class BathroomArticleComment extends FurnitureComment<BathroomArticle, BathroomArticleCommentReply> {
 
-    @ManyToOne
-    @JoinColumn(name = "article_id")
-    private BathroomArticle article;
 }

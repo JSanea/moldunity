@@ -2,16 +2,12 @@ package web.app.moldunity.entity.article;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
-import web.app.moldunity.entity.furniture.kitchen.KitchenArticleComment;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
-@Getter
-@Setter
+@Data
 @MappedSuperclass
 public abstract class Article {
     @Id

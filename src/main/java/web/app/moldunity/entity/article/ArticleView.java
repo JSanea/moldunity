@@ -1,11 +1,11 @@
 package web.app.moldunity.entity.article;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @MappedSuperclass
 public abstract class ArticleView {
     @Id

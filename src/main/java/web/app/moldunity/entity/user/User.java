@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
+import web.app.moldunity.entity.furniture.bedroom.BedroomArticle;
 import web.app.moldunity.entity.furniture.kitchen.KitchenArticle;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @Entity
-@Getter
-@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -54,6 +53,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<BathroomArticle> bathroomArticles;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<BedroomArticle> bedroomArticles;
 }
 
 
