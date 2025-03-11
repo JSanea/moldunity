@@ -18,7 +18,6 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     @Column(unique = true, length = 16)
@@ -31,7 +30,6 @@ public class User {
     private String email;
 
     @Column(length = 256)
-    @JsonIgnore
     private String password;
 
     @NotEmpty

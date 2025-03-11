@@ -21,4 +21,9 @@ public class AsyncKitchenService {
     public CompletableFuture<KitchenArticle> asyncGetById(Long id){
         return CompletableFuture.completedFuture(kitchenService.findById(id).orElseGet(KitchenArticle::new));
     }
+
+    @Async
+    public CompletableFuture<Long> asyncAddKitchenArticle(KitchenArticle kitchenArticle){
+        return CompletableFuture.completedFuture(kitchenService.save(kitchenArticle).getId());
+    }
 }
