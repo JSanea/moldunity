@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.entity.furniture.kitchen.KitchenArticle;
-import web.app.moldunity.service.entity.furniture.KitchenService;
+import web.app.moldunity.service.entity.furniture.KitchenArticleService;
 
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class AsyncKitchenService {
-    private final KitchenService kitchenService;
+public class AsyncKitchenArticleService {
+    private final KitchenArticleService kitchenService;
 
     @Autowired
-    public AsyncKitchenService(KitchenService kitchenService) {
+    public AsyncKitchenArticleService(KitchenArticleService kitchenService) {
         this.kitchenService = kitchenService;
     }
 

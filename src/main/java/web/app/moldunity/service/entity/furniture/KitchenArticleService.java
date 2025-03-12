@@ -6,10 +6,10 @@ import web.app.moldunity.repository.furniture.KitchenRepository;
 import web.app.moldunity.service.BaseJpaService;
 
 @Service
-public class KitchenService extends BaseJpaService<KitchenArticle, Long> {
+public class KitchenArticleService extends BaseJpaService<KitchenArticle, Long> {
     private final KitchenRepository kitchenRepository;
 
-    public KitchenService(KitchenRepository kitchenRepository) {
+    public KitchenArticleService(KitchenRepository kitchenRepository) {
         super(kitchenRepository);
         this.kitchenRepository = kitchenRepository;
     }

@@ -7,11 +7,11 @@ import web.app.moldunity.repository.furniture.BathroomRepository;
 import web.app.moldunity.service.BaseJpaService;
 
 @Service
-public class BathroomService extends BaseJpaService<BathroomArticle, Long> {
+public class BathroomArticleService extends BaseJpaService<BathroomArticle, Long> {
     private final BathroomRepository bathroomRepository;
 
     @Autowired
-    public BathroomService(BathroomRepository bathroomRepository) {
+    public BathroomArticleService(BathroomRepository bathroomRepository) {
         super(bathroomRepository);
         this.bathroomRepository = bathroomRepository;
     }
