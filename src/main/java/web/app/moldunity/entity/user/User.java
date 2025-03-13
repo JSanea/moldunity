@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends UserArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,15 +45,15 @@ public class User {
 
     private LocalDate lastLogonDate;
 
-    /************************** Furniture **************************/
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<KitchenArticle> kitchenArticles;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<BathroomArticle> bathroomArticles;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<BedroomArticle> bedroomArticles;
+//    /************************** Furniture **************************/
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+//    private List<KitchenArticle> kitchenArticles;
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+//    private List<BathroomArticle> bathroomArticles;
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+//    private List<BedroomArticle> bedroomArticles;
 }
 
 

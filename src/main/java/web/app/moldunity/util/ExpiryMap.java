@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Set;
 
-@Component
 public class ExpiryMap<K, V> {
     private HashMap<K, Expiry<V>> expiryMap = new HashMap<>();
     

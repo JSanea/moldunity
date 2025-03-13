@@ -32,7 +32,7 @@ public class KitchenController {
     @PostMapping(value = "/mobila/bucatarie/",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> addKitchenArticle(KitchenArticle kitchenArticle){
-        return CompletableFutureUtil.exceptionWrapper(asyncKitchenArticleService.asyncAddKitchenArticle(kitchenArticle));
+    public ResponseEntity<Long> add(KitchenArticle kitchenArticle){
+        return CompletableFutureUtil.exceptionWrapper(asyncKitchenArticleService.asyncAdd(kitchenArticle));
     }
 }

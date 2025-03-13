@@ -16,6 +16,7 @@ public abstract class ArticleComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String author;
 
     @Column(length = 512)

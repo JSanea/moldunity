@@ -23,7 +23,7 @@ public class AsyncKitchenArticleService {
     }
 
     @Async
-    public CompletableFuture<Long> asyncAddKitchenArticle(KitchenArticle kitchenArticle){
-        return CompletableFuture.completedFuture(kitchenService.save(kitchenArticle).getId());
+    public CompletableFuture<Long> asyncAdd(KitchenArticle kitchenArticle){
+        return CompletableFuture.completedFuture(kitchenService.add(kitchenArticle).getId());
     }
 }
