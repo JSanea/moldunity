@@ -5,12 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import web.app.moldunity.entity.appliances.AppliancesArticle;
+import web.app.moldunity.entity.electronics.ElectronicsArticle;
 
 @Data
 @Entity
 @Table(name = "televisor")
-public class Televisor extends AppliancesArticle<TelevisorComment, TelevisorImage, TelevisorView> {
+public class Televisor extends ElectronicsArticle<TelevisorComment, TelevisorImage, TelevisorView> {
     @NotEmpty
     private String brand;
 

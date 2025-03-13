@@ -16,6 +16,8 @@ import web.app.moldunity.entity.appliances.microwave.MicrowaveOven;
 import web.app.moldunity.entity.appliances.other.OtherAppliances;
 import web.app.moldunity.entity.appliances.oven.Oven;
 import web.app.moldunity.entity.appliances.vacuum_cleaner.VacuumCleaner;
+import web.app.moldunity.entity.electronics.laptop_tablet.LaptopTablet;
+import web.app.moldunity.entity.electronics.monitor.Monitor;
 import web.app.moldunity.entity.electronics.televisor.Televisor;
 import web.app.moldunity.entity.appliances.washing_machine.WashingMachine;
 import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
@@ -105,6 +107,13 @@ public abstract class UserArticle {
     /************************** Electronics **************************/
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Televisor> televisors;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Monitor> monitors;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<LaptopTablet> laptopTablets;
+
 
 
     /************************** Transport **************************/
