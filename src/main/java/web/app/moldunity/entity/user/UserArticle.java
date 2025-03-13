@@ -4,23 +4,27 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import web.app.moldunity.entity.appliances.climate.Climate;
 import web.app.moldunity.entity.appliances.cooker.Cooker;
 import web.app.moldunity.entity.appliances.dishwasher.DishWasher;
 import web.app.moldunity.entity.appliances.dryer.Dryer;
 import web.app.moldunity.entity.appliances.freezer.Freezer;
 import web.app.moldunity.entity.appliances.hob.Hob;
+import web.app.moldunity.entity.appliances.iron.Iron;
 import web.app.moldunity.entity.appliances.kitchen.KitchenAppliances;
 import web.app.moldunity.entity.appliances.microwave.MicrowaveOven;
+import web.app.moldunity.entity.appliances.other.OtherAppliances;
 import web.app.moldunity.entity.appliances.oven.Oven;
 import web.app.moldunity.entity.appliances.vacuum_cleaner.VacuumCleaner;
 import web.app.moldunity.entity.electronics.televisor.Televisor;
-import web.app.moldunity.entity.appliances.washingmachine.WashingMachine;
+import web.app.moldunity.entity.appliances.washing_machine.WashingMachine;
 import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
 import web.app.moldunity.entity.furniture.bedroom.BedroomArticle;
 import web.app.moldunity.entity.furniture.dining.DiningArticle;
 import web.app.moldunity.entity.furniture.kitchen.KitchenArticle;
 import web.app.moldunity.entity.furniture.office.OfficeArticle;
 import web.app.moldunity.entity.furniture.other.OtherFurnitureArticle;
+import web.app.moldunity.entity.furniture.other.OtherFurnitureArticleView;
 import web.app.moldunity.entity.furniture.sofa_armchair.SofaArmchairArticle;
 import web.app.moldunity.entity.furniture.table_chair.TableChairArticle;
 import web.app.moldunity.entity.furniture.wardrobe.Wardrobe;
@@ -89,8 +93,14 @@ public abstract class UserArticle {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<KitchenAppliances> kitchenAppliances;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Iron> irons;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Climate> climates;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<OtherAppliances> otherAppliances;
 
     /************************** Electronics **************************/
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)

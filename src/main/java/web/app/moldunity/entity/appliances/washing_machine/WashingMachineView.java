@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.appliances.washingmachine;
+package web.app.moldunity.entity.appliances.washing_machine;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

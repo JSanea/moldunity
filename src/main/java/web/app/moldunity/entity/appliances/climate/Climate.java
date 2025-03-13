@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.appliances.other;
+package web.app.moldunity.entity.appliances.climate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -8,8 +8,8 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 
 @Data
 @Entity
-@Table(name = "other_appliances")
-public class OtherAppliances extends AppliancesArticle<OtherAppliancesComment, OtherAppliancesImage, OtherAppliancesView> {
+@Table(name = "climate")
+public class Climate extends AppliancesArticle<ClimateComment, ClimateImage, ClimateView> {
     @NotEmpty
     private String brand;
 }
