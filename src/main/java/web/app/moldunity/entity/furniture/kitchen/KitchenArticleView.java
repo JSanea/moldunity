@@ -7,7 +7,7 @@ import web.app.moldunity.entity.furniture.FurnitureView;
 
 @Data
 @Entity
-@Table(name = "kitchen_views")
+@Table(name = "kitchen_furniture_views")
 public class KitchenArticleView extends FurnitureView<KitchenArticle> {
 
 }

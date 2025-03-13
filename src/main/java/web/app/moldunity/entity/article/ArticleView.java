@@ -1,6 +1,7 @@
 package web.app.moldunity.entity.article;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +14,6 @@ public abstract class ArticleView {
     private Long id;
 
     @Column(length = 32)
+    @NotEmpty
     private String viewId;
 }

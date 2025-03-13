@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.appliances.washingmachine;
+package web.app.moldunity.entity.appliances.microwave;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -8,8 +8,8 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 
 @Data
 @Entity
-@Table(name = "washing_machine")
-public class WashingMachine extends AppliancesArticle<WashingMachineComment, WashingMachineImage, WashingMachineView> {
+@Table(name = "microwave_oven")
+public class MicrowaveOven extends AppliancesArticle<MicrowaveOvenComment, MicrowaveOvenImage, MicrowaveOvenView> {
     @NotEmpty
     private String brand;
 
@@ -17,11 +17,8 @@ public class WashingMachine extends AppliancesArticle<WashingMachineComment, Was
     private String type;
 
     @NotEmpty
+    private String power;
+
+    @NotEmpty
     private String capacity;
-
-    @NotEmpty
-    private String rpm;
-
-    @NotEmpty
-    private String color;
 }

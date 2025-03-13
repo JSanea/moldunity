@@ -7,6 +7,6 @@ import web.app.moldunity.entity.furniture.FurnitureCommentReply;
 
 @Data
 @Entity
-@Table(name = "kitchen_comment_replies")
+@Table(name = "kitchen_furniture_comment_replies")
 public class KitchenArticleCommentReply extends FurnitureCommentReply<KitchenArticleComment> {
 }

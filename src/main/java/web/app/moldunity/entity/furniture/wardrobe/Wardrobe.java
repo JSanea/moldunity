@@ -11,10 +11,10 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Table(name = "wardrobe")
 public class Wardrobe extends FurnitureArticle<WardrobeComment, WardrobeImage, WardrobeView> {
     @NotEmpty
-    private Integer height;
+    private String height;
 
     @NotEmpty
-    private Integer width;
+    private String width;
 
     @NotEmpty
     private String color;

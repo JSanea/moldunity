@@ -4,7 +4,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import web.app.moldunity.entity.appliances.cooker.Cooker;
+import web.app.moldunity.entity.appliances.dishwasher.DishWasher;
+import web.app.moldunity.entity.appliances.dryer.Dryer;
 import web.app.moldunity.entity.appliances.freezer.Freezer;
+import web.app.moldunity.entity.appliances.hob.Hob;
+import web.app.moldunity.entity.appliances.kitchen.KitchenAppliances;
+import web.app.moldunity.entity.appliances.microwave.MicrowaveOven;
+import web.app.moldunity.entity.appliances.oven.Oven;
+import web.app.moldunity.entity.appliances.vacuum_cleaner.VacuumCleaner;
+import web.app.moldunity.entity.electronics.televisor.Televisor;
 import web.app.moldunity.entity.appliances.washingmachine.WashingMachine;
 import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
 import web.app.moldunity.entity.furniture.bedroom.BedroomArticle;
@@ -56,4 +65,63 @@ public abstract class UserArticle {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<WashingMachine> washingMachines;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Dryer> dryers;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<DishWasher> dishWashers;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Cooker> cookers;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Hob> hobs;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Oven> ovens;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<MicrowaveOven> microwaveOvens;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<VacuumCleaner> vacuumCleaners;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<KitchenAppliances> kitchenAppliances;
+
+
+
+
+    /************************** Electronics **************************/
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Televisor> televisors;
+
+
+    /************************** Transport **************************/
+
+    /************************** Immobile **************************/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

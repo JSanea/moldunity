@@ -25,7 +25,7 @@ public abstract class Article {
     private String subcategory;
 
     @NotEmpty
-    private Integer price;
+    private String price;
 
     @NotEmpty
     private String state;
