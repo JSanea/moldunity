@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.entity.user.User;
-import web.app.moldunity.service.UserService;
+import web.app.moldunity.service.user.UserService;
 
 import java.util.concurrent.CompletableFuture;
 

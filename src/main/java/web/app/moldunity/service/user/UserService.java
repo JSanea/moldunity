@@ -1,4 +1,4 @@
-package web.app.moldunity.service;
+package web.app.moldunity.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.app.moldunity.entity.user.User;
 import web.app.moldunity.repository.UserRepository;
+import web.app.moldunity.service.BaseJpaService;
 
 import java.time.LocalDate;
 

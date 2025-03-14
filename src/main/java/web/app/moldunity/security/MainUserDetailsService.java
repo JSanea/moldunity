@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.entity.user.User;
-import web.app.moldunity.service.UserService;
+import web.app.moldunity.service.user.UserService;
 
 import java.util.ArrayList;
 
