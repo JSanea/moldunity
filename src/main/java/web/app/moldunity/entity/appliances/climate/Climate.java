@@ -9,7 +9,7 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 @Data
 @Entity
 @Table(name = "climate")
-public class Climate extends AppliancesArticle<ClimateComment, ClimateImage, ClimateView> {
+public class Climate extends AppliancesArticle<ClimateImage, ClimateView> {
     @NotEmpty
     private String brand;
 }

@@ -9,7 +9,7 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Data
 @Entity
 @Table(name = "laptop_tablet")
-public class LaptopTablet extends ElectronicsArticle<LaptopTabletComment, LaptopTabletImage, LaptopTabletView> {
+public class LaptopTablet extends ElectronicsArticle<LaptopTabletImage, LaptopTabletView> {
     @NotEmpty
     private String brand;
 

@@ -9,7 +9,7 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "wardrobe")
-public class Wardrobe extends FurnitureArticle<WardrobeComment, WardrobeImage, WardrobeView> {
+public class Wardrobe extends FurnitureArticle<WardrobeImage, WardrobeView> {
     @NotEmpty
     private String height;
 

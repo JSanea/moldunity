@@ -9,7 +9,7 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 @Data
 @Entity
 @Table(name = "oven")
-public class Oven extends AppliancesArticle<OvenComment, OvenImage, OvenView> {
+public class Oven extends AppliancesArticle<OvenImage, OvenView> {
     @NotEmpty
     private String brand;
 

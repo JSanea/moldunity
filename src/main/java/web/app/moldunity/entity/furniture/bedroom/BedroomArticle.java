@@ -8,6 +8,6 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "bedroom")
-public class BedroomArticle extends FurnitureArticle<BedroomArticleComment, BedroomArticleImage ,BedroomArticleView> {
+public class BedroomArticle extends FurnitureArticle<BedroomArticleImage ,BedroomArticleView> {
 
 }

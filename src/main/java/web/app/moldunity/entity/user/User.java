@@ -41,19 +41,11 @@ public class User extends UserArticle {
     @NotEmpty
     private String location;
 
+    private Boolean blocked;
+
     private LocalDate createdAt;
 
     private LocalDate lastLogonDate;
-
-//    /************************** Furniture **************************/
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-//    private List<KitchenArticle> kitchenArticles;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-//    private List<BathroomArticle> bathroomArticles;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-//    private List<BedroomArticle> bedroomArticles;
 }
 
 

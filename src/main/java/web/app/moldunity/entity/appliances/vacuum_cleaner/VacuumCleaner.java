@@ -9,7 +9,7 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 @Data
 @Entity
 @Table(name = "vacuum_cleaner")
-public class VacuumCleaner extends AppliancesArticle<VacuumCleanerComment, VacuumCleanerImage, VacuumCleanerView> {
+public class VacuumCleaner extends AppliancesArticle<VacuumCleanerImage, VacuumCleanerView> {
     @NotEmpty
     private String brand;
 }

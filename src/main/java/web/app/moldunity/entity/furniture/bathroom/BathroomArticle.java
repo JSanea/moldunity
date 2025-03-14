@@ -13,6 +13,6 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "bathroom")
-public class BathroomArticle extends FurnitureArticle<BathroomArticleComment, BathroomArticleImage, BathroomArticleView> {
+public class BathroomArticle extends FurnitureArticle<BathroomArticleImage, BathroomArticleView> {
 
 }

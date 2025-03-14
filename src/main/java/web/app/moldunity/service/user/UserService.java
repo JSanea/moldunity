@@ -27,6 +27,7 @@ public class UserService extends BaseJpaService<User, Long> {
         user.setRole("USER");
         user.setCreatedAt(LocalDate.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setBlocked(false);
         return super.save(user);
     }
 

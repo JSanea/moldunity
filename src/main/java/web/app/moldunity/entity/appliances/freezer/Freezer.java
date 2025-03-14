@@ -10,7 +10,7 @@ import web.app.moldunity.entity.appliances.AppliancesArticle;
 @Data
 @Entity
 @Table(name = "freezer")
-public class Freezer extends AppliancesArticle<FreezerComment, FreezerImage, FreezerView> {
+public class Freezer extends AppliancesArticle<FreezerImage, FreezerView> {
     @NotEmpty
     private String brand;
 

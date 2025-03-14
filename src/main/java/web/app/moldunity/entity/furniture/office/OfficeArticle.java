@@ -8,5 +8,5 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "office")
-public class OfficeArticle extends FurnitureArticle<OfficeArticleComment, OfficeArticleImage, OfficeArticleView> {
+public class OfficeArticle extends FurnitureArticle<OfficeArticleImage, OfficeArticleView> {
 }

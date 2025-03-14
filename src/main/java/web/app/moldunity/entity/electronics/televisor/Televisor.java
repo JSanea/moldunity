@@ -10,7 +10,7 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Data
 @Entity
 @Table(name = "televisor")
-public class Televisor extends ElectronicsArticle<TelevisorComment, TelevisorImage, TelevisorView> {
+public class Televisor extends ElectronicsArticle<TelevisorImage, TelevisorView> {
     @NotEmpty
     private String brand;
 

@@ -9,10 +9,7 @@ import java.util.List;
 
 @Data
 @MappedSuperclass
-public abstract class ElectronicsArticle<C, I, V> extends Article {
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<C> comments;
-
+public abstract class ElectronicsArticle<I, V> extends Article {
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<I> images;
 
