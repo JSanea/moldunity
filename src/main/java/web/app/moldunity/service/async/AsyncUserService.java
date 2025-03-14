@@ -23,6 +23,11 @@ public class AsyncUserService {
     }
 
     @Async
+    public CompletableFuture<String[]> asyncGetPasswordAndRoleByUsername(String username){
+        return CompletableFuture.completedFuture(userService.getPasswordAndRoleByUsername(username));
+    }
+
+    @Async
     public CompletableFuture<Boolean> asyncExistUsername(String username){
         return CompletableFuture.completedFuture(userService.existUsername(username));
     }
