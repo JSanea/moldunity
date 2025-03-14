@@ -10,6 +10,7 @@ import web.app.moldunity.service.BaseJpaService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService extends BaseJpaService<User, Long> {
@@ -33,7 +34,13 @@ public class UserService extends BaseJpaService<User, Long> {
 
     @Transactional(readOnly = true)
     public User findByName(String username){
-        return userRepository.findByName(username).orElseGet(User::new);
+        User user = userRepository.findByName(username).orElseGet(User::new);
+
+        if("ADMIN".equals(user.getRole()))
+            return new User();
+
+        user.setPassword("********");
+        return user;
     }
 
     @Transactional(readOnly = true)

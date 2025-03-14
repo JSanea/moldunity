@@ -23,6 +23,16 @@ public class AsyncUserService {
     }
 
     @Async
+    public CompletableFuture<User> getById(Long id){
+        return CompletableFuture.completedFuture(userService.findById(id).orElseGet(User::new));
+    }
+
+    @Async
+    public CompletableFuture<User> getByName(String username){
+        return CompletableFuture.completedFuture(userService.findByName(username));
+    }
+
+    @Async
     public CompletableFuture<String[]> asyncGetPasswordAndRoleByUsername(String username){
         return CompletableFuture.completedFuture(userService.getPasswordAndRoleByUsername(username));
     }

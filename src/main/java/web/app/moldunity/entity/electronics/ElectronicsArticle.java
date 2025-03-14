@@ -16,7 +16,7 @@ public abstract class ElectronicsArticle<I, V> extends Article {
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<V> views;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 }
