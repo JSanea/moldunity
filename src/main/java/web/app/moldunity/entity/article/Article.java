@@ -28,9 +28,6 @@ public abstract class Article {
     private String price;
 
     @NotEmpty
-    private String state;
-
-    @NotEmpty
     private Integer view;
 
     @NotEmpty

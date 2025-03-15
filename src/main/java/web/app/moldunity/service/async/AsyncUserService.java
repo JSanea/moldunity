@@ -23,13 +23,13 @@ public class AsyncUserService {
     }
 
     @Async
-    public CompletableFuture<User> getById(Long id){
+    public CompletableFuture<User> asyncGetById(Long id){
         return CompletableFuture.completedFuture(userService.findById(id).orElseGet(User::new));
     }
 
     @Async
-    public CompletableFuture<User> getByName(String username){
-        return CompletableFuture.completedFuture(userService.findByName(username));
+    public CompletableFuture<User> asyncGetByName(String username){
+        return CompletableFuture.completedFuture(userService.getByName(username));
     }
 
     @Async

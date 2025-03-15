@@ -11,9 +11,6 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Table(name = "laptop_tablet")
 public class LaptopTablet extends ElectronicsArticle<LaptopTabletImage, LaptopTabletView> {
     @NotEmpty
-    private String brand;
-
-    @NotEmpty
     private String diagonal;
 
     @NotEmpty
@@ -36,6 +33,9 @@ public class LaptopTablet extends ElectronicsArticle<LaptopTabletImage, LaptopTa
 
     @NotEmpty
     private String batteryCapacity;
+
+    @NotEmpty
+    private String color;
 }
 
 

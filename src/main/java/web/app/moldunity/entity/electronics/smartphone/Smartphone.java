@@ -11,9 +11,6 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Table(name = "smartphone")
 public class Smartphone extends ElectronicsArticle<SmartphoneImage, SmartphoneView> {
     @NotEmpty
-    private String brand;
-
-    @NotEmpty
     private String model;
 
     @NotEmpty

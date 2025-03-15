@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class Expiry<V> {
-    //private K key;
     private V subject;
     private Long ttl;
     private Instant createdAt;

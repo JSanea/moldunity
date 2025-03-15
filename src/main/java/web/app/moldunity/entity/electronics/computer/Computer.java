@@ -11,9 +11,6 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Table(name = "computer")
 public class Computer extends ElectronicsArticle<ComputerImage, ComputerView> {
     @NotEmpty
-    private String brand;
-
-    @NotEmpty
     private String processor;
 
     @NotEmpty

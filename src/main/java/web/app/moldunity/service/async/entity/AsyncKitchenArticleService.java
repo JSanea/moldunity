@@ -3,7 +3,7 @@ package web.app.moldunity.service.async.entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import web.app.moldunity.entity.furniture.kitchen.KitchenArticle;
+import web.app.moldunity.entity.furniture.kitchen.KitchenFurniture;
 import web.app.moldunity.service.entity.furniture.KitchenArticleService;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,12 +18,12 @@ public class AsyncKitchenArticleService {
     }
 
     @Async
-    public CompletableFuture<KitchenArticle> asyncGetById(Long id){
-        return CompletableFuture.completedFuture(kitchenService.findById(id).orElseGet(KitchenArticle::new));
+    public CompletableFuture<KitchenFurniture> asyncGetById(Long id){
+        return CompletableFuture.completedFuture(kitchenService.findById(id).orElseGet(KitchenFurniture::new));
     }
 
     @Async
-    public CompletableFuture<Long> asyncAdd(KitchenArticle kitchenArticle){
+    public CompletableFuture<Long> asyncAdd(KitchenFurniture kitchenArticle){
         return CompletableFuture.completedFuture(kitchenService.add(kitchenArticle).getId());
     }
 }

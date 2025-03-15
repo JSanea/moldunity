@@ -12,9 +12,6 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Table(name = "monitor")
 public class Monitor extends ElectronicsArticle<MonitorImage, MonitorView> {
     @NotEmpty
-    private String brand;
-
-    @NotEmpty
     private String resolution;
 
     @NotEmpty

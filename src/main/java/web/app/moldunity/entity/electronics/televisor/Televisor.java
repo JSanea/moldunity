@@ -12,9 +12,6 @@ import web.app.moldunity.entity.electronics.ElectronicsArticle;
 @Table(name = "televisor")
 public class Televisor extends ElectronicsArticle<TelevisorImage, TelevisorView> {
     @NotEmpty
-    private String brand;
-
-    @NotEmpty
     private Integer diagonal;
 
     @NotEmpty

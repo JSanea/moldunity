@@ -7,12 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.app.moldunity.entity.user.User;
+import web.app.moldunity.repository.UserRepository;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.email.EmailConfirmationService;
 import web.app.moldunity.util.CompletableFutureUtil;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
@@ -23,6 +23,9 @@ public class UserController {
     private final EmailConfirmationService emailConfirmationService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     public UserController(AsyncUserService asyncUserService, EmailConfirmationService emailConfirmationService) {
         this.asyncUserService = asyncUserService;
         this.emailConfirmationService = emailConfirmationService;
@@ -30,7 +33,7 @@ public class UserController {
 
     @GetMapping(value = "/user/{username}")
     public ResponseEntity<User> getByUsername(@PathVariable String username){
-        return CompletableFutureUtil.exceptionWrapper(asyncUserService.getByName(username));
+        return CompletableFutureUtil.exceptionWrapper(asyncUserService.asyncGetByName(username));
     }
 
     @PostMapping(

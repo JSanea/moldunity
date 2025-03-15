@@ -28,4 +28,35 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select password, role from users where username = :username", nativeQuery = true)
     List<String> getPasswordAndRoleByUsername(@Param("username") String username);
+
+    @Query(value = "select u from User u " +
+            "left join fetch u.kitchenFurnitures " +
+            "left join fetch u.bathroomFurnitures " +
+            "left join fetch u.bedroomFurnitures " +
+            "left join fetch u.diningFurnitures " +
+            "left join fetch u.sofaArmchairs " +
+            "left join fetch u.tableChairs " +
+            "left join fetch u.wardrobes " +
+            "left join fetch u.officeFurnitures " +
+            "left join fetch u.otherFurnitures " +
+            "left join fetch u.freezers " +
+            "left join fetch u.washingMachines " +
+            "left join fetch u.dryers " +
+            "left join fetch u.dishWashers " +
+            "left join fetch u.cookers " +
+            "left join fetch u.hobs " +
+            "left join fetch u.ovens " +
+            "left join fetch u.microwaveOvens " +
+            "left join fetch u.vacuumCleaners " +
+            "left join fetch u.kitchenAppliances " +
+            "left join fetch u.irons " +
+            "left join fetch u.climates " +
+            "left join fetch u.otherAppliances " +
+            "left join fetch u.televisors " +
+            "left join fetch u.monitors " +
+            "left join fetch u.laptopTablets " +
+            "left join fetch u.smartphones " +
+            "left join fetch u.computers " +
+            "where u.username = ?1")
+    Optional<User> getByName(String username);
 }

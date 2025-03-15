@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.furniture.bedroom;
+package web.app.moldunity.entity.furniture.office;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -7,6 +7,6 @@ import web.app.moldunity.entity.furniture.FurnitureImage;
 
 @Data
 @Entity
-@Table(name = "bedroom_views")
-public class BedroomArticleView extends FurnitureImage<BedroomArticle> {
+@Table(name = "office_images")
+public class OfficeFurnitureImage extends FurnitureImage<OfficeFurniture> {
 }

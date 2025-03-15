@@ -6,7 +6,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import web.app.moldunity.entity.article.ArticleImage;
-import web.app.moldunity.entity.furniture.bathroom.BathroomArticle;
 
 @Data
 @MappedSuperclass

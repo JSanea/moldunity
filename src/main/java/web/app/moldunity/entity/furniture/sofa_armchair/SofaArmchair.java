@@ -8,5 +8,5 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "sofa_armchair")
-public class SofaArmchairArticle extends FurnitureArticle<SofaArmchairArticleImage, SofaArmchairArticleView> {
+public class SofaArmchair extends FurnitureArticle<SofaArmchairImage, SofaArmchairView> {
 }
