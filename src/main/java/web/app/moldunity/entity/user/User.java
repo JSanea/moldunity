@@ -37,6 +37,9 @@ public class User extends UserArticle {
     @NotEmpty
     private String location;
 
+    @NotEmpty
+    private String phone;
+
     private Boolean blocked;
 
     private LocalDate createdAt;

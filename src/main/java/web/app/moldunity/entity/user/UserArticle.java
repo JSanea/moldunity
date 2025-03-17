@@ -19,7 +19,9 @@ import web.app.moldunity.entity.appliances.vacuum_cleaner.VacuumCleaner;
 import web.app.moldunity.entity.electronics.computer.Computer;
 import web.app.moldunity.entity.electronics.laptop_tablet.LaptopTablet;
 import web.app.moldunity.entity.electronics.monitor.Monitor;
+import web.app.moldunity.entity.electronics.other.OtherElectronics;
 import web.app.moldunity.entity.electronics.smartphone.Smartphone;
+import web.app.moldunity.entity.electronics.smartwatch.SmartWatch;
 import web.app.moldunity.entity.electronics.televisor.Televisor;
 import web.app.moldunity.entity.appliances.washing_machine.WashingMachine;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
@@ -31,6 +33,12 @@ import web.app.moldunity.entity.furniture.other.OtherFurniture;
 import web.app.moldunity.entity.furniture.sofa_armchair.SofaArmchair;
 import web.app.moldunity.entity.furniture.table_chair.TableChair;
 import web.app.moldunity.entity.furniture.wardrobe.Wardrobe;
+import web.app.moldunity.entity.immobile.apartament.Apartament;
+import web.app.moldunity.entity.immobile.home.Home;
+import web.app.moldunity.entity.transport.agri.AgriVehicle;
+import web.app.moldunity.entity.transport.bus_minibus.BusMinibus;
+import web.app.moldunity.entity.transport.car.Car;
+import web.app.moldunity.entity.transport.truck.Truck;
 
 import java.util.Set;
 
@@ -121,10 +129,33 @@ public abstract class UserArticle {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Computer> computers;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<SmartWatch> smartWatches;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<OtherElectronics> otherElectronics;
 
     /************************** Transport **************************/
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Car> cars;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<BusMinibus> busMinibuses;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Truck> trucks;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<AgriVehicle> agriVehicles;
 
     /************************** Immobile **************************/
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Apartament> apartaments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Home> homes;
+
+
 }
 
 

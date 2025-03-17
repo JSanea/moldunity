@@ -14,6 +14,9 @@ public abstract class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
+    private String offerType;
+
     @Column(length = 128)
     @NotEmpty
     private String title;
@@ -27,7 +30,6 @@ public abstract class Article {
     @NotEmpty
     private String price;
 
-    @NotEmpty
     private Integer view;
 
     @NotEmpty
@@ -43,9 +45,9 @@ public abstract class Article {
     @NotEmpty
     private String description;
 
-    @NotEmpty
     private LocalDateTime createdAt;
 
-    @NotEmpty
     private LocalDateTime updateAt;
+
+    private LocalDateTime republishedAt;
 }

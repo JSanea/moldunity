@@ -1,10 +1,13 @@
 package web.app.moldunity.config.async;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
+
 import static web.app.moldunity.util.ThreadPoolAndHikariPoolSize.*;
 
 import java.util.concurrent.Executor;
@@ -12,7 +15,6 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
-
     private final Integer QUEUE_CAPACITY = 512;
 
     @Override
@@ -24,7 +26,8 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(QUEUE_CAPACITY);
         executor.setThreadNamePrefix("async_");
         executor.initialize();
-        return executor;
+
+        return new DelegatingSecurityContextAsyncTaskExecutor(executor);
     }
 }
 

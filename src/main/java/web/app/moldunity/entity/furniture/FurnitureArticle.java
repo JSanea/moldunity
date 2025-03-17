@@ -8,6 +8,7 @@ import web.app.moldunity.entity.article.Article;
 import web.app.moldunity.entity.user.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @MappedSuperclass
@@ -16,13 +17,14 @@ public abstract class FurnitureArticle<I, V> extends Article {
     private String state;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<I> images;
+    private Set<I> images;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
-    private List<V> views;
+    private Set<V> views;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 }

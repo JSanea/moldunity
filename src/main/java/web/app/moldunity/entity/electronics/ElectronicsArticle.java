@@ -21,11 +21,12 @@ public abstract class ElectronicsArticle<I, V> extends Article {
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<I> images;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
     private List<V> views;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 }

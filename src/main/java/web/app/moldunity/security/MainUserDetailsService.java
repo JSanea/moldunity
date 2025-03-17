@@ -19,10 +19,12 @@ import java.util.concurrent.ExecutionException;
 public class MainUserDetailsService implements UserDetailsService {
     private final String ROLE_PREFIX = "ROLE_";
     private final AsyncUserService asyncUserService;
+    private final UserService userService;
 
     @Autowired
-    public MainUserDetailsService(AsyncUserService asyncUserService) {
+    public MainUserDetailsService(AsyncUserService asyncUserService, UserService userService) {
         this.asyncUserService = asyncUserService;
+        this.userService = userService;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class MainUserDetailsService implements UserDetailsService {
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
-        }
+      }
 
         String password = passwordAndRole[0];
         String role = passwordAndRole[1];

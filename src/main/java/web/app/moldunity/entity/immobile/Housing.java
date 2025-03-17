@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.appliances;
+package web.app.moldunity.entity.immobile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -7,20 +7,26 @@ import lombok.Data;
 import web.app.moldunity.entity.article.Article;
 import web.app.moldunity.entity.user.User;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @MappedSuperclass
-public abstract class AppliancesArticle<I, V> extends Article {
+public abstract class Housing<I, V> extends Article {
     @NotEmpty
-    private String state;
+    private String area;
+
+    @NotEmpty
+    private String kitchenArea;
+
+    @NotEmpty
+    private String rooms;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<I> images;
+    private Set<I> images;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
-    private List<V> views;
+    private Set<V> views;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

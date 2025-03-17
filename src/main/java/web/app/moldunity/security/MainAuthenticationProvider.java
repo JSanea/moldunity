@@ -35,7 +35,7 @@ public class MainAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Bad Credentials");
         }
 
-        return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(username, user.getPassword(), user.getAuthorities());
     }
 
     @Override
