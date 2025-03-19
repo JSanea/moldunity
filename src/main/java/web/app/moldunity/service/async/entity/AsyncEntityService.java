@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AsyncEntityService<T> {
+    private final Integer ELEMENTS = 5;
     private final EntityService entityService;
 
     public AsyncEntityService(EntityService entityService) {
@@ -33,7 +34,7 @@ public class AsyncEntityService<T> {
 
     @Async
     public CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity){
-        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(50, 50 * page, entity));
+        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page-1), entity));
     }
 
     @Async
