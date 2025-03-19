@@ -3,12 +3,16 @@ package web.app.moldunity.entity.article;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import web.app.moldunity.entity.user.User;
+import web.app.moldunity.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
 
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode
 public abstract class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +46,6 @@ public abstract class Article {
     private String phone;
 
     @Column(length = 1024)
-    @NotEmpty
     private String description;
 
     private LocalDateTime createdAt;
@@ -50,4 +53,11 @@ public abstract class Article {
     private LocalDateTime updateAt;
 
     private LocalDateTime republishedAt;
+
+    public void setDateTimeFields(){
+        LocalDateTime dt = DateTimeUtil.getDateTimeNow();
+        this.setCreatedAt(dt);
+        this.setUpdateAt(dt);
+        this.setRepublishedAt(dt);
+    }
 }

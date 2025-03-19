@@ -4,11 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.electronics.ElectronicsArticle;
 
 @Data
 @Entity
 @Table(name = "smartphone")
+@EqualsAndHashCode(callSuper = true)
 public class Smartphone extends ElectronicsArticle<SmartphoneImage, SmartphoneView> {
     @NotEmpty
     private String model;

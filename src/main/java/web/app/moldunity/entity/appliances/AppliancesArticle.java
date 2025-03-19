@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.article.Article;
 import web.app.moldunity.entity.user.User;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true)
 public abstract class AppliancesArticle<I, V> extends Article {
     @NotEmpty
     private String state;

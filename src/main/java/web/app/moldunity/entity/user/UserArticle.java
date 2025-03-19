@@ -4,6 +4,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.appliances.climate.Climate;
 import web.app.moldunity.entity.appliances.cooker.Cooker;
 import web.app.moldunity.entity.appliances.dishwasher.DishWasher;

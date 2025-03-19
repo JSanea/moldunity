@@ -5,12 +5,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.article.ArticleImage;
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true)
 public abstract class FurnitureImage<A> extends ArticleImage {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "article_id")
     private A article;
 }

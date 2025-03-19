@@ -32,7 +32,7 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(WhiteUrls.get()).permitAll()
+                        .requestMatchers(WhiteUrls.getUrls()).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/login")

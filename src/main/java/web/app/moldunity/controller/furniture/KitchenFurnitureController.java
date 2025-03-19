@@ -10,29 +10,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.app.moldunity.entity.furniture.kitchen.KitchenFurniture;
-import web.app.moldunity.service.async.entity.AsyncKitchenArticleService;
+import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.util.CompletableFutureUtil;
 
 
 @RestController
 @Slf4j
-public class KitchenController {
-    private final AsyncKitchenArticleService asyncKitchenArticleService;
+public class KitchenFurnitureController {
+    private final AsyncEntityService<KitchenFurniture> asyncEntityService;
 
     @Autowired
-    public KitchenController(AsyncKitchenArticleService asyncKitchenArticleService) {
-        this.asyncKitchenArticleService = asyncKitchenArticleService;
+    public KitchenFurnitureController(AsyncEntityService<KitchenFurniture> asyncEntityService) {
+        this.asyncEntityService = asyncEntityService;
     }
 
-    @GetMapping(value = "/mobila/bucatarie/{id}")
+    @GetMapping(value = "/furniture/kitchen/{id}")
     public ResponseEntity<KitchenFurniture> getById(@PathVariable Long id){
-        return CompletableFutureUtil.exceptionWrapper(asyncKitchenArticleService.asyncGetById(id));
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, KitchenFurniture.class));
     }
 
-    @PostMapping(value = "/mobila/bucatarie/",
+    @PostMapping(value = "/furniture/kitchen/",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> add(KitchenFurniture kitchenArticle){
-        return CompletableFutureUtil.exceptionWrapper(asyncKitchenArticleService.asyncAdd(kitchenArticle));
+        return null;
     }
 }

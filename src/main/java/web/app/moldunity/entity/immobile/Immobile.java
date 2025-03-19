@@ -1,16 +1,19 @@
-package web.app.moldunity.entity.immobile.home;
+package web.app.moldunity.entity.immobile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import web.app.moldunity.entity.article.Article;
 import web.app.moldunity.entity.user.User;
 
 import java.util.Set;
 
 @Data
 @MappedSuperclass
-public class Immobile<I, V> {
+@EqualsAndHashCode(callSuper = true)
+public abstract class Immobile<I, V>  extends Article {
     @NotEmpty
     private String area;
 
