@@ -47,6 +47,11 @@ public class EntityService {
     public <T> Long getNumRecords(Class<T> entity){
         return (Long) entityManager.createQuery("select count(x.id) from " + entity.getSimpleName() + " x").getSingleResult();
     }
+
+    @Transactional
+    public <T> void removeById(Long id, Class<T> entity){
+        entityManager.remove(entityManager.find(entity, id));
+    }
 }
 
 
