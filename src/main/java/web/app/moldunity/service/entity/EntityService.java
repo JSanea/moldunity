@@ -28,9 +28,9 @@ public class EntityService {
     }
 
     @Transactional(readOnly = true)
-    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity){
+    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity, String field){
         return entityManager
-                .createQuery("select x From " + entity.getSimpleName() + " x order by x.republishedAt desc limit ?1 offset ?2", entity)
+                .createQuery("select x From " + entity.getSimpleName() + " x order by element(x."+ field +").republishedAt desc limit ?1 offset ?2", entity)
                 .setParameter(1, limit)
                 .setParameter(2, offset)
                 .getResultList();
@@ -50,8 +50,11 @@ public class EntityService {
     }
 
     @Transactional
-    public <T> void removeById(Long id, Class<T> entity){
-        entityManager.remove(entityManager.find(entity, id));
+    public <T> Boolean removeById(Long id, Class<T> entity){
+        T t = entityManager.find(entity, id);
+        if(null == t) return false;
+        entityManager.remove(t);
+        return entityManager.find(entity, id) == null;
     }
 }
 

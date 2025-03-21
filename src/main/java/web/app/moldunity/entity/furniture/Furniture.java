@@ -1,5 +1,6 @@
 package web.app.moldunity.entity.furniture;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,30 +22,30 @@ import java.util.List;
 @Entity
 @Table(name = "furniture")
 public class Furniture extends Category {
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<KitchenFurniture> kitchenFurnitures;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<BathroomFurniture> bathroomFurnitures;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<DiningFurniture> diningFurnitures;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<SofaArmchair> sofaArmchairs;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<TableChair> tableChairs;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Wardrobe> wardrobes;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<OfficeFurniture> officeFurnitures;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<OtherFurniture> otherFurnitures;
 
-    @OneToMany(mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<FurnitureImage> furnitureImages;
 }

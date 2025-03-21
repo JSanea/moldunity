@@ -15,7 +15,6 @@ import java.util.Set;
 public abstract class UserArticle {
     /************************** Furniture **************************/
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
-    @JsonManagedReference
     private List<Furniture> furnitures;
 
 //    /************************** Appliances **************************/

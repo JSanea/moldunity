@@ -23,9 +23,9 @@ public class CompletableFutureUtil {
     public static <T> ResponseEntity<Boolean> removeExceptionWrapper(CompletableFuture<T> completableFuture){
         try {
             if (completableFuture.get() == null){
-                return new ResponseEntity<>(false, HttpStatus.OK);
+                return new ResponseEntity<>(true, HttpStatus.OK);
             }
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);

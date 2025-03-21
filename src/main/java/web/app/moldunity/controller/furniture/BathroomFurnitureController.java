@@ -14,8 +14,8 @@ import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.util.CompletableFutureUtil;
 import web.app.moldunity.util.SecurityUtil;
-import web.app.moldunity.util.UserUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -24,13 +24,11 @@ import java.util.concurrent.ExecutionException;
 public class BathroomFurnitureController {
     private final AsyncEntityService asyncEntityService;
     private final AsyncUserService asyncUserService;
-    private final UserUtil userUtil;
 
     @Autowired
-    public BathroomFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, UserUtil userUtil) {
+    public BathroomFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
-        this.userUtil = userUtil;
     }
 
     @GetMapping(value = "/furniture/bathroom/{id}")
@@ -38,53 +36,44 @@ public class BathroomFurnitureController {
         return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Furniture.class));
     }
 
-//    @GetMapping(value = "/furniture/bathroom")
-//    public ResponseEntity<List<BathroomFurniture>> getPageSortedByTimeDesc(@RequestParam Integer page)  {
-//        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetPageSortedByRepublishedAtDesc(page, BathroomFurniture.class));
-//    }
+    @GetMapping(value = "/furniture/bathroom")
+    public ResponseEntity<List<Furniture>> getPageSortedByTimeDesc(@RequestParam Integer page)  {
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetPageSortedByRepublishedAtDesc(page, Furniture.class, "bathroomFurnitures"));
+    }
 
-//    @GetMapping(value = "/furniture/bathroom/count")
-//    public ResponseEntity<Long> getNumRecords(){
-//        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetNumRecords(BathroomFurniture.class));
-//    }
+    @GetMapping(value = "/furniture/bathroom/count")
+    public ResponseEntity<Long> getNumRecords(){
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetNumRecords(BathroomFurniture.class));
+    }
 
     @PostMapping(value = "/bathroom",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> add(@RequestBody Furniture furniture) throws ExecutionException, InterruptedException {
-        //User user = userUtil.getUserByPrincipalName();
+    public ResponseEntity<Long> add(@RequestBody Furniture furniture) {
+        try {
+            //**** get username form security context ****
+            String username = SecurityUtil.getUsername();
+            if (null == username) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
 
-//        if(null == user.getId()){
-//            log.error("User is not authenticated");
-//            return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
-//        }
+            //**** set user for furniture entity ****
+            User u = new User();
+            u.setId(asyncUserService.asyncGetIdByUsername(username).get());
 
-        String username = SecurityUtil.getUsername();
-        Long uid = asyncUserService.asyncGetIdByUsername(username).get();
-
-        User u = new User();
-        u.setId(uid);
-        furniture.setUser(u);
-
-        Furniture f = asyncEntityService.asyncAdd(furniture, Furniture.class).get();
-        if (null == f || null == f.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
-
-        for(BathroomFurniture b : f.getBathroomFurnitures()){
-            b.setFurniture(f);
+            //**** add furniture entity ****
+            BathroomFurniture b = furniture.getBathroomFurnitures().get(0);
+            furniture.setUser(u);
+            b.setFurniture(furniture);
             b.setDateTimeFields();
-            BathroomFurniture b2 = asyncEntityService.asyncAdd(b, BathroomFurniture.class).get();
+            furniture.setBathroomFurnitures(List.of(b));
 
-            if (null == b2 || null == b2.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
+            Furniture f = asyncEntityService.asyncAdd(furniture, Furniture.class).get();
+            if (null == f || null == f.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return new ResponseEntity<>(f.getId(), HttpStatus.OK);
+        } catch (InterruptedException | ExecutionException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(f.getId(), HttpStatus.OK);
-        // 1. furniture - set user - ret  furniture
-        // 2. bathroom - set furniture - ret bathroom
-        // return furniture id
-
-        //bathroomFurniture.setDateTimeFields();
-        //bathroomFurniture.setUser(user);
-
-        //return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncAdd(bathroomFurniture, BathroomFurniture.class));
     }
 
     @PostMapping(value = "/furniture/{id}/images",
@@ -98,14 +87,13 @@ public class BathroomFurnitureController {
     @PutMapping(value = "/bathroom",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody BathroomFurniture bathroomFurniture){
+    public void update(@RequestBody Furniture furniture){
 
     }
 
     @DeleteMapping(value = "/bathroom/{id}")
     public ResponseEntity<Boolean> remove(@PathVariable Long id){
-        asyncEntityService.removeById(id, BathroomFurniture.class);
-        return CompletableFutureUtil.removeExceptionWrapper(asyncEntityService.asyncGetById(id, BathroomFurniture.class));
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncRemoveById(id, Furniture.class));
     }
 }
 

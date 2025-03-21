@@ -33,9 +33,9 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity) {
+    public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity, String field) {
         if (page < 1) page = 1;
-        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page - 1), entity));
+        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page - 1), entity, field));
     }
 
     @Async
@@ -44,8 +44,8 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> void removeById(Long id, Class<T> entity) {
-        entityService.removeById(id, entity);
+    public <T> CompletableFuture<Boolean> asyncRemoveById(Long id, Class<T> entity) {
+        return CompletableFuture.completedFuture(entityService.removeById(id, entity));
     }
 }
 
