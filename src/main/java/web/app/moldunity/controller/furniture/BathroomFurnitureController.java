@@ -12,6 +12,7 @@ import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 import web.app.moldunity.entity.user.User;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
+import web.app.moldunity.service.entity.furniture.FurnitureService;
 import web.app.moldunity.util.CompletableFutureUtil;
 import web.app.moldunity.util.SecurityUtil;
 
@@ -24,17 +25,15 @@ import java.util.concurrent.ExecutionException;
 public class BathroomFurnitureController {
     private final AsyncEntityService asyncEntityService;
     private final AsyncUserService asyncUserService;
+    private final FurnitureService furnitureService;
 
     @Autowired
-    public BathroomFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService) {
+    public BathroomFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, FurnitureService furnitureService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
+        this.furnitureService = furnitureService;
     }
 
-    @GetMapping(value = "/furniture/bathroom/{id}")
-    public ResponseEntity<Furniture> getById(@PathVariable Long id){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Furniture.class));
-    }
 
     @GetMapping(value = "/furniture/bathroom")
     public ResponseEntity<List<Furniture>> getPageSortedByTimeDesc(@RequestParam Integer page)  {
@@ -50,30 +49,12 @@ public class BathroomFurnitureController {
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> add(@RequestBody Furniture furniture) {
-        try {
-            //**** get username form security context ****
-            String username = SecurityUtil.getUsername();
-            if (null == username) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
+        BathroomFurniture b = furniture.getBathroomFurnitures().get(0);
+        b.setFurniture(furniture);
+        b.setDateTimeFields();
+        furniture.setBathroomFurnitures(List.of(b));
 
-            //**** set user for furniture entity ****
-            User u = new User();
-            u.setId(asyncUserService.asyncGetIdByUsername(username).get());
-
-            //**** add furniture entity ****
-            BathroomFurniture b = furniture.getBathroomFurnitures().get(0);
-            furniture.setUser(u);
-            b.setFurniture(furniture);
-            b.setDateTimeFields();
-            furniture.setBathroomFurnitures(List.of(b));
-
-            Furniture f = asyncEntityService.asyncAdd(furniture, Furniture.class).get();
-            if (null == f || null == f.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
-
-            return new ResponseEntity<>(f.getId(), HttpStatus.OK);
-        } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return furnitureService.add(furniture);
     }
 
     @PostMapping(value = "/furniture/{id}/images",

@@ -11,11 +11,9 @@ public class WhiteUrls {
                 "/transport/car/**",
 
                 //***** Furniture *****//
+                "/furniture/**",
                 "/furniture/bathroom/**",
-                "/furniture/bedroom/**",
                 "/furniture/kitchen/**",
-                "/furniture/dining/**",
-                "/furniture/office/**",
 
                 //***** Appliances *****//
         };
