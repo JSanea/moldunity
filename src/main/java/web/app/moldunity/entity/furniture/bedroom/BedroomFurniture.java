@@ -9,7 +9,6 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "bedroom")
-@EqualsAndHashCode(callSuper = true)
-public class BedroomFurniture extends FurnitureArticle<BedroomFurnitureImage, BedroomFurnitureView> {
+public class BedroomFurniture extends FurnitureArticle {
 
 }

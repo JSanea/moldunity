@@ -23,10 +23,10 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @Slf4j
 public class KitchenFurnitureController {
-    private final AsyncEntityService<KitchenFurniture> asyncEntityService;
+    private final AsyncEntityService asyncEntityService;
 
     @Autowired
-    public KitchenFurnitureController(AsyncEntityService<KitchenFurniture> asyncEntityService) {
+    public KitchenFurnitureController(AsyncEntityService asyncEntityService) {
         this.asyncEntityService = asyncEntityService;
     }
 

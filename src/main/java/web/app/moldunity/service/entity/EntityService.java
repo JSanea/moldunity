@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 
 import java.util.List;
 
@@ -27,10 +28,10 @@ public class EntityService {
     }
 
     @Transactional(readOnly = true)
-    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer page, Integer offset, Class<T> entity){
+    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity){
         return entityManager
                 .createQuery("select x From " + entity.getSimpleName() + " x order by x.republishedAt desc limit ?1 offset ?2", entity)
-                .setParameter(1, page)
+                .setParameter(1, limit)
                 .setParameter(2, offset)
                 .getResultList();
     }

@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import web.app.moldunity.entity.user.User;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -22,17 +21,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select password from users where username = :username", nativeQuery = true)
     @Transactional(readOnly = true)
-    String selectPasswordByUsername(@Param("username") String username);
+    String getPasswordByUsername(@Param("username") String username);
 
     @Query(value = "select role from users where username = :username", nativeQuery = true)
     @Transactional(readOnly = true)
-    String selectRoleByUsername(@Param("username") String username);
+    String getRoleByUsername(@Param("username") String username);
 
     @Query(value = "select password, role from users where username = :username", nativeQuery = true)
     @Transactional(readOnly = true)
-    List<String> selectPasswordAndRoleByUsername(@Param("username") String username);
+    List<String> getPasswordAndRoleByUsername(@Param("username") String username);
 
     @Query(value = "select u.id from User u where u.username = ?1")
     @Transactional(readOnly = true)
-    Long selectIdByName(String username);
+    Long getIdByName(String username);
 }

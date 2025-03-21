@@ -5,11 +5,19 @@ public class WhiteUrls {
         return new String[]{
                 "/user/**",
                 "/register",
+                //***** Immobile *****//
+
+                //***** Transport *****//
+                "/transport/car/**",
+
+                //***** Furniture *****//
                 "/furniture/bathroom/**",
                 "/furniture/bedroom/**",
                 "/furniture/kitchen/**",
                 "/furniture/dining/**",
                 "/furniture/office/**",
+
+                //***** Appliances *****//
         };
     }
 }

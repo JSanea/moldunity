@@ -31,7 +31,7 @@ public class UserService extends BaseJpaService<User, Long> {
     }
 
     public User getByName(String username){
-        Long id = userRepository.selectIdByName(username);
+        Long id = userRepository.getIdByName(username);
 
         if(null == id)
             return new User();
@@ -46,17 +46,17 @@ public class UserService extends BaseJpaService<User, Long> {
 
     @Transactional(readOnly = true)
     public String getPasswordByUsername(String username){
-        return userRepository.selectPasswordByUsername(username);
+        return userRepository.getPasswordByUsername(username);
     }
 
     @Transactional(readOnly = true)
     public String getRoleByUsername(String username){
-        return userRepository.selectRoleByUsername(username);
+        return userRepository.getRoleByUsername(username);
     }
 
     @Transactional(readOnly = true)
     public String[] getPasswordAndRoleByUsername(String username){
-        return userRepository.selectPasswordAndRoleByUsername(username).get(0).split(",");
+        return userRepository.getPasswordAndRoleByUsername(username).get(0).split(",");
     }
 
     @Transactional(readOnly = true)
@@ -67,5 +67,10 @@ public class UserService extends BaseJpaService<User, Long> {
     @Transactional(readOnly = true)
     public Boolean existEmail(String email){
         return email.equals(userRepository.existEmail(email));
+    }
+
+    @Transactional(readOnly = true)
+    public Long getIdByUsername(String username){
+        return userRepository.getIdByName(username);
     }
 }

@@ -46,4 +46,9 @@ public class AsyncUserService {
     public CompletableFuture<Boolean> asyncExistEmail(String email){
         return CompletableFuture.completedFuture(userService.existEmail(email));
     }
+
+    @Async
+    public CompletableFuture<Long> asyncGetIdByUsername(String username){
+        return CompletableFuture.completedFuture(userService.getIdByUsername(username));
+    }
 }

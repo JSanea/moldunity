@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.furniture;
+package web.app.moldunity.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -6,20 +6,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import web.app.moldunity.entity.article.Article;
 import web.app.moldunity.entity.user.User;
-
-import java.util.List;
-import java.util.Set;
 
 @Data
 @MappedSuperclass
-public abstract class FurnitureArticle extends Article {
+@EqualsAndHashCode
+public abstract class Category {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotEmpty
-    private String state;
+    private String subcategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "furniture_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Furniture furniture;
+    @JsonBackReference
+    private User user;
 }

@@ -1,19 +1,21 @@
 package web.app.moldunity.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import web.app.moldunity.entity.furniture.Furniture;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.List;
+import java.util.Set;
 
 
 @Data
 @Entity
 @Table(name = "users")
-public class User extends UserArticle {
+public class User extends UserArticle{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,19 +50,6 @@ public class User extends UserArticle {
 
     private LocalDate lastLogonDate;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) && username.equals(user.username) &&
-                email.equals(user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, email);
-    }
 }
 
 

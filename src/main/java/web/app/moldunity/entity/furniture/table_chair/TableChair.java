@@ -10,6 +10,6 @@ import web.app.moldunity.entity.furniture.FurnitureArticle;
 @Data
 @Entity
 @Table(name = "table_chair")
-@EqualsAndHashCode(callSuper = true)
-public class TableChair extends FurnitureArticle<TableChairImage, TableChairView> {
+
+public class TableChair extends FurnitureArticle {
 }
