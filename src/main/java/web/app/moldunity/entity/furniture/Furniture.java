@@ -1,10 +1,8 @@
 package web.app.moldunity.entity.furniture;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.Category;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 import web.app.moldunity.entity.furniture.dining.DiningFurniture;
