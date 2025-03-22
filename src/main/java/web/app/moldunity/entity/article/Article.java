@@ -48,16 +48,16 @@ public abstract class Article {
     @Column(length = 1024)
     private String description;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updateAt;
-
-    private LocalDateTime republishedAt;
-
-    public void setDateTimeFields(){
-        LocalDateTime dt = DateTimeUtil.getDateTimeNow();
-        this.setCreatedAt(dt);
-        this.setUpdateAt(dt);
-        this.setRepublishedAt(dt);
-    }
+//    private LocalDateTime createdAt;
+//
+//    private LocalDateTime updateAt;
+//
+//    private LocalDateTime republishedAt;
+//
+//    public void setDateTimeFields(){
+//        LocalDateTime dt = DateTimeUtil.getDateTimeNow();
+//        this.setCreatedAt(dt);
+//        this.setUpdateAt(dt);
+//        this.setRepublishedAt(dt);
+//    }
 }

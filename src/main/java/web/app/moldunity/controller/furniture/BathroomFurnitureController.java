@@ -37,7 +37,7 @@ public class BathroomFurnitureController {
 
     @GetMapping(value = "/furniture/bathroom")
     public ResponseEntity<List<Furniture>> getPageSortedByTimeDesc(@RequestParam Integer page)  {
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetPageSortedByRepublishedAtDesc(page, Furniture.class, "bathroomFurnitures"));
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetPageSortedByRepublishedAtDesc(page, Furniture.class, "Baie"));
     }
 
     @GetMapping(value = "/furniture/bathroom/count")
@@ -51,7 +51,6 @@ public class BathroomFurnitureController {
     public ResponseEntity<Long> add(@RequestBody Furniture furniture) {
         BathroomFurniture b = furniture.getBathroomFurnitures().get(0);
         b.setFurniture(furniture);
-        b.setDateTimeFields();
         furniture.setBathroomFurnitures(List.of(b));
 
         return furnitureService.add(furniture);

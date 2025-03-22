@@ -28,11 +28,13 @@ public class EntityService {
     }
 
     @Transactional(readOnly = true)
-    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity, String field){
+    public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity, String subcategory){
         return entityManager
-                .createQuery("select x From " + entity.getSimpleName() + " x order by element(x."+ field +").republishedAt desc limit ?1 offset ?2", entity)
-                .setParameter(1, limit)
-                .setParameter(2, offset)
+                .createQuery("select x From " + entity.getSimpleName() +
+                        " x  where x.subcategory = ?1 order by x.republishedAt desc limit ?2 offset ?3", entity)
+                .setParameter(1, subcategory)
+                .setParameter(2, limit)
+                .setParameter(3, offset)
                 .getResultList();
     }
 

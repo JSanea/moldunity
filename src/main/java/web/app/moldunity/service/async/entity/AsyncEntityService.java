@@ -33,9 +33,9 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity, String field) {
+    public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity, String subcategory) {
         if (page < 1) page = 1;
-        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page - 1), entity, field));
+        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page - 1), entity, subcategory));
     }
 
     @Async

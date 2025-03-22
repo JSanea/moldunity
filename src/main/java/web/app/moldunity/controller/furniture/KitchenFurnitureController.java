@@ -37,7 +37,6 @@ public class KitchenFurnitureController {
     public ResponseEntity<Long> add(@RequestBody Furniture furniture){
         KitchenFurniture k = furniture.getKitchenFurnitures().get(0);
         k.setFurniture(furniture);
-        k.setDateTimeFields();
         furniture.setKitchenFurnitures(List.of(k));
 
         return furnitureService.add(furniture);

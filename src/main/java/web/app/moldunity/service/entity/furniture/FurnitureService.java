@@ -37,6 +37,8 @@ public class FurnitureService {
             User u = new User();
             u.setId(asyncUserService.asyncGetIdByUsername(username).get());
             furniture.setUser(u);
+            furniture.setUsername(username);
+            furniture.setDateTimeFields();
 
             Furniture f = asyncEntityService.asyncAdd(furniture, Furniture.class).get();
             if (null == f || null == f.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.user.User;
+import web.app.moldunity.util.DateTimeUtil;
+
+import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
@@ -20,10 +23,26 @@ public abstract class Category {
     @NotEmpty
     private String subcategory;
 
+    @NotEmpty
+    private String username;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updateAt;
+
+    private LocalDateTime republishedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    public void setDateTimeFields(){
+        LocalDateTime dt = DateTimeUtil.getDateTimeNow();
+        this.setCreatedAt(dt);
+        this.setUpdateAt(dt);
+        this.setRepublishedAt(dt);
+    }
 }
 
 
