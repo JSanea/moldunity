@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 
 import java.util.List;
 
@@ -20,6 +19,13 @@ public class EntityService {
     @Transactional(readOnly = true)
     public <T> T getById(Long id, Class<T> entity){
         return entityManager.find(entity, id);
+    }
+
+    @Transactional(readOnly = true)
+    public <T> T getByEId(String eId, Class<T> entity){
+        return entityManager.createQuery("select x From " + entity.getSimpleName() + " x where x.eId = ?1", entity)
+                .setParameter(1, eId)
+                .getSingleResult();
     }
 
     @Transactional(readOnly = true)
@@ -39,10 +45,10 @@ public class EntityService {
     }
 
     @Transactional
-    public <T> T add(T t, Class<T> entity){
+    public <T> T add(T t, String eId, Class<T> entity){
         entityManager.persist(t);
-        return entityManager
-                .createQuery("select x from " + entity.getSimpleName() + " x order by x.id desc limit 1", entity)
+        return entityManager.createQuery("select x From " + entity.getSimpleName() + " x where x.eId = ?1", entity)
+                .setParameter(1, eId)
                 .getSingleResult();
     }
 

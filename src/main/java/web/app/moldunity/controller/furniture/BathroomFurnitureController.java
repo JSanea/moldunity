@@ -2,23 +2,19 @@ package web.app.moldunity.controller.furniture;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.app.moldunity.entity.furniture.Furniture;
 import web.app.moldunity.entity.furniture.FurnitureImage;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
-import web.app.moldunity.entity.user.User;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
 import web.app.moldunity.util.CompletableFutureUtil;
-import web.app.moldunity.util.SecurityUtil;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @Slf4j
@@ -33,7 +29,6 @@ public class BathroomFurnitureController {
         this.asyncUserService = asyncUserService;
         this.furnitureService = furnitureService;
     }
-
 
     @GetMapping(value = "/furniture/bathroom")
     public ResponseEntity<List<Furniture>> getPageSortedByTimeDesc(@RequestParam Integer page)  {

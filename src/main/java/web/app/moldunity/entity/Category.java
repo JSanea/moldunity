@@ -20,6 +20,10 @@ public abstract class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    @NotEmpty
+    private String eId;
+
     @NotEmpty
     private String subcategory;
 

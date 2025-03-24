@@ -5,13 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import web.app.moldunity.entity.furniture.Furniture;
 import web.app.moldunity.entity.furniture.kitchen.KitchenFurniture;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
-import web.app.moldunity.util.CompletableFutureUtil;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ import java.util.List;
 public class KitchenFurnitureController {
     private final AsyncEntityService asyncEntityService;
     private final AsyncUserService asyncUserService;
-
     private final FurnitureService furnitureService;
 
     @Autowired

@@ -23,13 +23,18 @@ public class AsyncEntityService {
     }
 
     @Async
+    public <T> CompletableFuture<T>  asyncGetByEId(String eId, Class<T> entity){
+        return CompletableFuture.completedFuture(entityService.getByEId(eId, entity));
+    }
+
+    @Async
     public <T> CompletableFuture<List<T>> asyncGetAll(Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getAll(entity));
     }
 
     @Async
-    public <T> CompletableFuture<T> asyncAdd(T t, Class<T> entity) {
-        return CompletableFuture.completedFuture(entityService.add(t, entity));
+    public <T> CompletableFuture<T> asyncAdd(T t, String eId, Class<T> entity) {
+        return CompletableFuture.completedFuture(entityService.add(t, eId, entity));
     }
 
     @Async

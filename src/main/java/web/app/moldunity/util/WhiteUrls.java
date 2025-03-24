@@ -5,6 +5,7 @@ public class WhiteUrls {
         return new String[]{
                 "/user/**",
                 "/register",
+                "/authenticate",
                 //***** Immobile *****//
 
                 //***** Transport *****//
