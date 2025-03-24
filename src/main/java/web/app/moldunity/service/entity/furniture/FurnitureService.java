@@ -21,13 +21,11 @@ import java.util.concurrent.ExecutionException;
 public class FurnitureService {
     private final AsyncEntityService asyncEntityService;
     private final AsyncUserService asyncUserService;
-    private final EntityService entityService;
 
     @Autowired
     public FurnitureService(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, EntityService entityService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
-        this.entityService = entityService;
     }
 
     @Transactional
