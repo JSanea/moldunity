@@ -33,7 +33,7 @@ public class FurnitureService {
         try {
             //**** get username form security context ****
             String username = SecurityUtil.getUsername();
-            if (null == username) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
+            if (null == username || username.equals("anonymousUser")) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
 
             //**** set user for furniture entity ****
             String eId = UUID.randomUUID().toString();
