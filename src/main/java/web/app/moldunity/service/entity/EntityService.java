@@ -1,7 +1,7 @@
 package web.app.moldunity.service.entity;
 
 import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,12 +9,8 @@ import java.util.List;
 
 @Service
 public class EntityService {
-    private final EntityManager entityManager;
-
-    @Autowired
-    public EntityService(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Transactional(readOnly = true)
     public <T> T getById(Long id, Class<T> entity){

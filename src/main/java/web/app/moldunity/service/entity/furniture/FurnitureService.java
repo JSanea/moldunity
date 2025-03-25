@@ -44,7 +44,7 @@ public class FurnitureService {
             furniture.setUsername(username);
             furniture.setDateTimeFields();
 
-            Furniture f = asyncEntityService.asyncAdd(furniture, eId, Furniture.class).get();
+            Furniture f = asyncEntityService.asyncAdd(furniture, furniture.getEId(), Furniture.class).get();
             if (null == f || null == f.getId()) return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
 
             return new ResponseEntity<>(f.getId(), HttpStatus.OK);
