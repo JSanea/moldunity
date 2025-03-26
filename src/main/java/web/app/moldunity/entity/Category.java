@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.user.User;
 import web.app.moldunity.util.DateTimeUtil;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class Category {
     @Id

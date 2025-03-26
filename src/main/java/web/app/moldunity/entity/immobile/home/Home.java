@@ -10,6 +10,7 @@ import web.app.moldunity.entity.immobile.Housing;
 @Data
 @Entity
 @Table(name = "home")
+@EqualsAndHashCode(callSuper = true)
 public class Home extends Housing {
     @NotEmpty
     private String floors;

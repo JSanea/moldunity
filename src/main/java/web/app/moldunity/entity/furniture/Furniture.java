@@ -1,8 +1,10 @@
 package web.app.moldunity.entity.furniture;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.Category;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 import web.app.moldunity.entity.furniture.dining.DiningFurniture;
@@ -19,6 +21,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "furniture")
+@EqualsAndHashCode(callSuper = true)
 public class Furniture extends Category {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<KitchenFurniture> kitchenFurnitures;
@@ -46,4 +49,8 @@ public class Furniture extends Category {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<FurnitureImage> furnitureImages;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "favorite", fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnore
+    private List<FavoriteFurniture> favoriteFurnitures;
 }

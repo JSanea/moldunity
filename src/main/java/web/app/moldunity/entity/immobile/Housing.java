@@ -1,18 +1,18 @@
 package web.app.moldunity.entity.immobile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.article.Article;
-import web.app.moldunity.entity.furniture.Furniture;
-import web.app.moldunity.entity.user.User;
-
-import java.util.Set;
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true)
 public abstract class Housing extends Article {
     @NotEmpty
     private String area;

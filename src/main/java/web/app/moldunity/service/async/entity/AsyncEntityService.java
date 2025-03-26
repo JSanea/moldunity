@@ -32,10 +32,6 @@ public class AsyncEntityService {
         return CompletableFuture.completedFuture(entityService.getAll(entity));
     }
 
-    @Async
-    public <T> CompletableFuture<T> asyncAdd(T t, String eId, Class<T> entity) {
-        return CompletableFuture.completedFuture(entityService.add(t, eId, entity));
-    }
 
     @Async
     public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity, String subcategory) {
@@ -46,6 +42,16 @@ public class AsyncEntityService {
     @Async
     public <T> CompletableFuture<Long> asyncGetNumRecords(Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getNumRecords(entity));
+    }
+
+    @Async
+    public <T> CompletableFuture<List<T>> getFavorite(Long id, Class<T> entity, String favoriteField){
+        return CompletableFuture.completedFuture(entityService.getFavorite(id, entity, favoriteField));
+    }
+
+    @Async
+    public <T> CompletableFuture<T> asyncAdd(T t, String eId, Class<T> entity) {
+        return CompletableFuture.completedFuture(entityService.add(t, eId, entity));
     }
 
     @Async

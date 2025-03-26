@@ -9,6 +9,8 @@ import web.app.moldunity.entity.furniture.Furniture;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.util.CompletableFutureUtil;
 
+import java.util.List;
+
 @RestController
 public class FurnitureController {
     private final AsyncEntityService asyncEntityService;
@@ -28,4 +30,25 @@ public class FurnitureController {
     public ResponseEntity<Long> getNumRecords(){
         return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetNumRecords(Furniture.class));
     }
+
+    @GetMapping(value = "/furniture/favorite/user/{id}")
+    public ResponseEntity<List<Furniture>> getFavorite(@PathVariable Long id){
+       return CompletableFutureUtil.exceptionWrapper(asyncEntityService.getFavorite(id, Furniture.class, "favoriteFurnitures"));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

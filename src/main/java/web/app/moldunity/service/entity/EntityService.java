@@ -30,6 +30,16 @@ public class EntityService {
     }
 
     @Transactional(readOnly = true)
+    public <T> List<T> getFavorite(Long id, Class<T> entity, String favoriteField){
+        return entityManager
+                .createQuery("select f From " + entity.getSimpleName() + " f " +
+                "left join f." + favoriteField + " "  +
+                "where element(f." + favoriteField + ").user.id = ?1", entity)
+                .setParameter(1, id)
+                .getResultList();
+    }
+
+    @Transactional(readOnly = true)
     public <T> List<T> getPageSortedByRepublishedAtDesc(Integer limit, Integer offset, Class<T> entity, String subcategory){
         return entityManager
                 .createQuery("select x From " + entity.getSimpleName() +

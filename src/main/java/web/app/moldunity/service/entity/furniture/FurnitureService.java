@@ -35,7 +35,7 @@ public class FurnitureService {
             String username = SecurityUtil.getUsername();
             if (null == username || username.equals("anonymousUser")) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
 
-            //**** set user for furniture entity ****
+            //**** add furniture entity ****
             String eId = UUID.randomUUID().toString();
             User u = new User();
             u.setId(asyncUserService.asyncGetIdByUsername(username).get());

@@ -55,7 +55,7 @@ public class BathroomFurnitureController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public void addImages(@PathVariable Long id,
-                          @RequestBody Map<String, FurnitureImage> images) {
+                          @RequestBody Map<Integer, FurnitureImage> images) {
 
     }
 
