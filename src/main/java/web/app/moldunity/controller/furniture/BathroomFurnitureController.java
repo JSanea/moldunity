@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.app.moldunity.entity.furniture.Furniture;
-import web.app.moldunity.entity.furniture.FurnitureImage;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
@@ -14,7 +13,6 @@ import web.app.moldunity.service.entity.furniture.FurnitureService;
 import web.app.moldunity.util.CompletableFutureUtil;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Slf4j
@@ -51,25 +49,12 @@ public class BathroomFurnitureController {
         return furnitureService.add(furniture);
     }
 
-    @PostMapping(value = "/furniture/{id}/images",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public void addImages(@PathVariable Long id,
-                          @RequestBody Map<Integer, FurnitureImage> images) {
-
-    }
-
     @PutMapping(value = "/bathroom",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public void update(@RequestBody Furniture furniture){
-
     }
 
-    @DeleteMapping(value = "/bathroom/{id}")
-    public ResponseEntity<Boolean> remove(@PathVariable Long id){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncRemoveById(id, Furniture.class));
-    }
 }
 
 
