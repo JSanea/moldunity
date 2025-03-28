@@ -23,10 +23,23 @@ public abstract class Category {
     private String eId;
 
     @NotEmpty
-    private String subcategory;
+    private String username;
 
     @NotEmpty
-    private String username;
+    private String offerType;
+
+    @Column(length = 128)
+    @NotEmpty
+    private String title;
+
+    @NotEmpty
+    private String category;
+
+    @NotEmpty
+    private String subcategory;
+
+    @Column(length = 1024)
+    private String description;
 
     private LocalDateTime createdAt;
 

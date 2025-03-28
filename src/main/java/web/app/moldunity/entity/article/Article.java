@@ -13,19 +13,6 @@ public abstract class Article {
     private Long id;
 
     @NotEmpty
-    private String offerType;
-
-    @Column(length = 128)
-    @NotEmpty
-    private String title;
-
-    @NotEmpty
-    private String category;
-
-    @NotEmpty
-    private String subcategory;
-
-    @NotEmpty
     private String price;
 
     private Integer view;
@@ -39,8 +26,6 @@ public abstract class Article {
     @NotEmpty
     private String phone;
 
-    @Column(length = 1024)
-    private String description;
 }
 
 

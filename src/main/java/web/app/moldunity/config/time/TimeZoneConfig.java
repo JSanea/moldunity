@@ -8,7 +8,6 @@ import java.util.TimeZone;
 
 @Component
 public class TimeZoneConfig {
-
     private final String TIME_ZONE = "Europe/Chisinau";
 
     @PostConstruct
