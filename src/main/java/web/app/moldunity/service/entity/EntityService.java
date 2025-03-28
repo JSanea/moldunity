@@ -30,12 +30,12 @@ public class EntityService {
     }
 
     @Transactional(readOnly = true)
-    public <T> List<T> getFavorite(Long id, Class<T> entity, String favoriteField){
+    public <T> List<T> getFavorite(String username, Class<T> entity, String favoriteField){
         return entityManager
                 .createQuery("select f From " + entity.getSimpleName() + " f " +
                 "left join f." + favoriteField + " "  +
-                "where element(f." + favoriteField + ").user.id = ?1", entity)
-                .setParameter(1, id)
+                "where element(f." + favoriteField + ").user.username = ?1", entity)
+                .setParameter(1, username)
                 .getResultList();
     }
 

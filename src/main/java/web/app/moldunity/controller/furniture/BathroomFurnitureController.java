@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.app.moldunity.entity.furniture.Furniture;
 import web.app.moldunity.entity.furniture.bathroom.BathroomFurniture;
-import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
 import web.app.moldunity.util.CompletableFutureUtil;
@@ -18,13 +17,11 @@ import java.util.List;
 @Slf4j
 public class BathroomFurnitureController {
     private final AsyncEntityService asyncEntityService;
-    private final AsyncUserService asyncUserService;
     private final FurnitureService furnitureService;
 
     @Autowired
-    public BathroomFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, FurnitureService furnitureService) {
+    public BathroomFurnitureController(AsyncEntityService asyncEntityService, FurnitureService furnitureService) {
         this.asyncEntityService = asyncEntityService;
-        this.asyncUserService = asyncUserService;
         this.furnitureService = furnitureService;
     }
 
@@ -54,7 +51,6 @@ public class BathroomFurnitureController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public void update(@RequestBody Furniture furniture){
     }
-
 }
 
 

@@ -25,7 +25,6 @@ public abstract class Article {
 
     @NotEmpty
     private String phone;
-
 }
 
 

@@ -10,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AsyncEntityService {
-    private final Integer ELEMENTS = 50;
     private final EntityService entityService;
 
     public AsyncEntityService(EntityService entityService) {
@@ -35,7 +34,7 @@ public class AsyncEntityService {
     @Async
     public <T> CompletableFuture<List<T>> asyncGetPageSortedByRepublishedAtDesc(Integer page, Class<T> entity, String subcategory) {
         if (page < 1) page = 1;
-        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(ELEMENTS, ELEMENTS * (page - 1), entity, subcategory));
+        return CompletableFuture.completedFuture(entityService.getPageSortedByRepublishedAtDesc(50, 50 * (page - 1), entity, subcategory));
     }
 
     @Async
@@ -44,8 +43,8 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> CompletableFuture<List<T>> getFavorite(Long id, Class<T> entity, String favoriteField){
-        return CompletableFuture.completedFuture(entityService.getFavorite(id, entity, favoriteField));
+    public <T> CompletableFuture<List<T>> asyncGetFavorite(String username, Class<T> entity, String favoriteField){
+        return CompletableFuture.completedFuture(entityService.getFavorite(username, entity, favoriteField));
     }
 
     @Async
