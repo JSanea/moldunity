@@ -1,12 +1,13 @@
 package web.app.moldunity.service.async.entity;
 
-import org.springframework.scheduling.annotation.Async;;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.service.entity.EntityService;
 
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+;
 
 @Service
 public class AsyncEntityService {
@@ -55,6 +56,11 @@ public class AsyncEntityService {
     @Async
     public <T> CompletableFuture<Boolean> asyncRemoveById(Long id, Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.removeById(id, entity));
+    }
+
+    @Async
+    public <T> void asyncRemove(T t, Class<T> entity){
+        entityService.remove(t, entity);
     }
 }
 

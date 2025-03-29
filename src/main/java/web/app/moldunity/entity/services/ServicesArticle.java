@@ -4,7 +4,7 @@ package web.app.moldunity.entity.services;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import web.app.moldunity.entity.article.Article;
+import web.app.moldunity.entity.Article;
 
 @Data
 @MappedSuperclass

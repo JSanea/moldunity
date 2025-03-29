@@ -7,14 +7,12 @@ public class WhiteUrls {
                 "/register",
                 "/authenticate",
                 //***** Immobile *****//
+                "/immobile/**",
 
                 //***** Transport *****//
-                "/transport/car/**",
 
                 //***** Furniture *****//
                 "/furniture/**",
-                "/furniture/bathroom/**",
-                "/furniture/kitchen/**",
 
                 //***** Appliances *****//
         };

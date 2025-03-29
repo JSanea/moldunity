@@ -1,4 +1,4 @@
-package web.app.moldunity.entity.article;
+package web.app.moldunity.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;

@@ -70,6 +70,11 @@ public class EntityService {
         entityManager.remove(t);
         return entityManager.find(entity, id) == null;
     }
+
+    @Transactional
+    public <T> void remove(T t, Class<T> entity){
+        entityManager.remove(t);
+    }
 }
 
 

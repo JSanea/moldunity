@@ -8,7 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import web.app.moldunity.entity.article.Article;
+import web.app.moldunity.entity.Article;
 
 @Data
 @MappedSuperclass
