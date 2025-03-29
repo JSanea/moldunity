@@ -2,6 +2,7 @@ package web.app.moldunity.controller.furniture;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +42,9 @@ public class BathroomFurnitureController {
     @PostMapping(value = "/bathroom",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> add(@RequestBody Furniture furniture) {
+    public ResponseEntity<Long> add(@RequestBody Furniture furniture, @Value("${articles.limit}") Long limit) {
         try {
-            if(asyncEntityService.asyncGetCountOfUserArticles(SecurityUtil.getUsername(), Furniture.class).get() >= 5)
+            if(asyncEntityService.asyncGetCountOfUserArticles(SecurityUtil.getUsername(), Furniture.class).get() >= limit)
                 return new ResponseEntity<>(0L, HttpStatus.BAD_REQUEST);
         } catch (InterruptedException | ExecutionException e) {
            log.error(e.getMessage());
