@@ -14,7 +14,6 @@ public class EmailConfig {
     private String USERNAME;
     @Value("${email.password}")
     private String PASSWORD;
-
     @Value("${email.host}")
     private String EMAIL_HOST;
 

@@ -7,7 +7,6 @@ import web.app.moldunity.service.entity.EntityService;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-;
 
 @Service
 public class AsyncEntityService {
@@ -41,6 +40,11 @@ public class AsyncEntityService {
     @Async
     public <T> CompletableFuture<Long> asyncGetNumRecords(Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getNumRecords(entity));
+    }
+
+    @Async
+    public <T> CompletableFuture<Long> asyncGetCountOfUserArticles(String username, Class<T> entity){
+        return CompletableFuture.completedFuture(entityService.getCountOfUserArticles(username, entity));
     }
 
     @Async

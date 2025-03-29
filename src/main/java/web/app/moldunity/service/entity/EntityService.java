@@ -50,17 +50,24 @@ public class EntityService {
                 .getResultList();
     }
 
+    @Transactional(readOnly = true)
+    public <T> Long getNumRecords(Class<T> entity){
+        return (Long) entityManager.createQuery("select count(x.id) from " + entity.getSimpleName() + " x").getSingleResult();
+    }
+
+    @Transactional(readOnly = true)
+    public <T> Long getCountOfUserArticles(String username, Class<T> entity){
+        return entityManager.createQuery("select count(*) From " + entity.getSimpleName() + " x where x.username = ?1", Long.class)
+                .setParameter(1, username)
+                .getSingleResult();
+    }
+
     @Transactional
     public <T> T add(T t, String eId, Class<T> entity){
         entityManager.persist(t);
         return entityManager.createQuery("select x From " + entity.getSimpleName() + " x where x.eId = ?1", entity)
                 .setParameter(1, eId)
                 .getSingleResult();
-    }
-
-    @Transactional(readOnly = true)
-    public <T> Long getNumRecords(Class<T> entity){
-        return (Long) entityManager.createQuery("select count(x.id) from " + entity.getSimpleName() + " x").getSingleResult();
     }
 
     @Transactional
