@@ -33,6 +33,9 @@ public class ForgotPasswordService {
     public ForgotPasswordStatus sendCode(String email) {
         Long TTL_MIN = 5L;
         try {
+            if(!asyncUserService.asyncExistEmail(email).get())
+                return ForgotPasswordStatus.INVALID_EMAIL;
+
             Integer code = new Random().nextInt(900000) + 100000;
             codes.remove(email);
             codes.put(email, new Expiry<>(code, TTL_MIN));

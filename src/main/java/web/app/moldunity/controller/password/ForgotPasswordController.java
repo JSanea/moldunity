@@ -22,11 +22,11 @@ public class ForgotPasswordController {
     }
 
     @PutMapping(value = "/update-password")
-    public ForgotPasswordStatus updatePassword(@RequestBody Map<String, String> updates){
+    public ForgotPasswordStatus updatePassword(@RequestBody Map<String, String> credentials){
         return forgotPasswordService.updatePassword(
-                updates.get("email"),
-                updates.get("password"),
-                Integer.valueOf(updates.get("code"))
+                credentials.get("email"),
+                credentials.get("password"),
+                Integer.valueOf(credentials.get("code"))
         );
     }
 }
