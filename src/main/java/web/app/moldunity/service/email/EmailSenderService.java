@@ -1,5 +1,6 @@
 package web.app.moldunity.service.email;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.MailException;
@@ -8,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class EmailSenderService{
     @Autowired
     private final JavaMailSender emailSender;
@@ -27,6 +29,7 @@ public class EmailSenderService{
             emailSender.send(simpleMailMessage);
             return true;
         } catch (MailException e) {
+            log.error(e.getMessage());
             return false;
         }
     }

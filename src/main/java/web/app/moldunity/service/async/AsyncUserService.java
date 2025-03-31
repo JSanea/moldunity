@@ -53,4 +53,9 @@ public class AsyncUserService {
     public CompletableFuture<Long> asyncGetIdByUsername(String username){
         return CompletableFuture.completedFuture(userService.getIdByUsername(username));
     }
+
+    @Async
+    public void asyncUpdatePassword(String email, String password){
+        userService.updatePassword(email, password);
+    }
 }

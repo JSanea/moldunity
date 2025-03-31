@@ -52,17 +52,16 @@ public class FurnitureController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try {
             Furniture f = asyncEntityService.asyncGetById(id, Furniture.class).get();
-            if(null != f && (f.getUsername().equals(SecurityUtil.getUsername()) || "ROLE_ADMIN".equals(SecurityUtil.getRole()))) {
-                return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncRemoveById(id, Furniture.class));
-            }else{
+            if(null == f || !(f.getUsername().equals(SecurityUtil.getUsername()) || "ROLE_ADMIN".equals(SecurityUtil.getRole())))
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-            }
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncRemoveById(id, Furniture.class));
     }
 }
+
 
 
 

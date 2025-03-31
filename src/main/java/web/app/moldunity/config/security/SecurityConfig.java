@@ -33,7 +33,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(WhiteUrls.getUrls()).permitAll()
-                        .requestMatchers("/register").permitAll()
+                        //.requestMatchers("/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")

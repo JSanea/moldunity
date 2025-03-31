@@ -1,6 +1,7 @@
 package web.app.moldunity.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -34,4 +35,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select u.id from User u where u.username = ?1")
     @Transactional(readOnly = true)
     Long getIdByName(String username);
+
+    @Modifying
+    @Query(value = "UPDATE users SET password = :password WHERE email = :email", nativeQuery = true)
+    @Transactional
+    void updatePassword(@Param("email") String email, @Param("password") String password);
 }
+
+
+
+
+
+

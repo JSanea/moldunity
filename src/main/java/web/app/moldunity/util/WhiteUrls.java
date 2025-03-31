@@ -6,6 +6,9 @@ public class WhiteUrls {
                 "/user/**",
                 "/register",
                 "/authenticate",
+                "/verification-code",
+                "/update-password",
+
                 //***** Immobile *****//
                 "/immobile/**",
 
