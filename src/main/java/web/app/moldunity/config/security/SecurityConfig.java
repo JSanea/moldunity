@@ -20,7 +20,6 @@ import web.app.moldunity.security.WhiteUrls;
 @EnableMethodSecurity(securedEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig {
-    private final Integer BCRYPT_STRENGTH = 12;
     private final MainAuthenticationProvider mainAuthenticationProvider;
 
     @Autowired
@@ -60,7 +59,7 @@ public class SecurityConfig {
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(BCRYPT_STRENGTH);
+        return new BCryptPasswordEncoder(12);
     }
 }
 

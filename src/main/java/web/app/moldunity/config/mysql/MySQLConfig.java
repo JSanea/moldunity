@@ -30,28 +30,22 @@ public class MySQLConfig {
     private String USERNAME;
     @Value("${spring.datasource.password}")
     private String PASSWORD;
-    private final String JDBC_URL = "jdbc:mysql://localhost:3306/moldunity_test";
-    private final String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private final String TRANSACTION_ISOLATION = "TRANSACTION_REPEATABLE_READ";
-    private final Long CONNECTION_TIMEOUT = 30_000L;
-    private final Long IDLE_TIMEOUT = 300_000L;
-    private final Long MAX_LIFETIME = 1_200_000L;
 
     @Primary
     @Bean
     public HikariDataSource mysqlDataSource(){
         HikariConfig config = new HikariConfig();
 
-        config.setJdbcUrl(JDBC_URL);
         config.setUsername(USERNAME);
         config.setPassword(PASSWORD);
-        config.setDriverClassName(DRIVER_CLASS_NAME);
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/moldunity_test");
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setTransactionIsolation("TRANSACTION_REPEATABLE_READ");
         config.setMinimumIdle(getPoolSize());
         config.setMaximumPoolSize(getMaxPoolSize());
-        config.setTransactionIsolation(TRANSACTION_ISOLATION);
-        config.setConnectionTimeout(CONNECTION_TIMEOUT);
-        config.setIdleTimeout(IDLE_TIMEOUT);
-        config.setMaxLifetime(MAX_LIFETIME);
+        config.setConnectionTimeout(30_000L);
+        config.setIdleTimeout(300_000L);
+        config.setMaxLifetime(1_200_000L);
 
         return new HikariDataSource(config);
     }
