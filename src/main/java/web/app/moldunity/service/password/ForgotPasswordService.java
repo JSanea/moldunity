@@ -57,7 +57,7 @@ public class ForgotPasswordService {
     public ForgotPasswordStatus updatePassword(String email, String password, Integer code){
         if(!code.equals(codes.getItem(email)))
             return ForgotPasswordStatus.INVALID_CODE;
-
+        codes.remove(email);
         asyncUserService.asyncUpdatePassword(email, passwordEncoder.encode(password));
         return ForgotPasswordStatus.SUCCESS;
     }

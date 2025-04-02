@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import web.app.moldunity.entity.user.User;
+import web.app.moldunity.entity.mysql.user.User;
 import web.app.moldunity.util.Expiry;
 import web.app.moldunity.util.ExpiryMap;
 import web.app.moldunity.util.KeyGenerator;

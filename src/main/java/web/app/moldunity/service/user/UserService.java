@@ -3,8 +3,8 @@ package web.app.moldunity.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import web.app.moldunity.entity.user.User;
-import web.app.moldunity.repository.UserRepository;
+import web.app.moldunity.entity.mysql.user.User;
+import web.app.moldunity.repository.mysql.UserRepository;
 import web.app.moldunity.service.BaseJpaService;
 
 import java.time.LocalDate;
@@ -69,5 +69,9 @@ public class UserService extends BaseJpaService<User, Long> {
 
     public void updatePassword(String email, String password){
         userRepository.updatePassword(email, password);
+    }
+
+    public void changePassword(String username, String password){
+        userRepository.changePassword(username, password);
     }
 }

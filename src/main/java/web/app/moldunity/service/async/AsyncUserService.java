@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import web.app.moldunity.entity.user.User;
+import web.app.moldunity.entity.mysql.user.User;
 import web.app.moldunity.service.user.UserService;
 
 import java.util.concurrent.CompletableFuture;
@@ -57,5 +57,15 @@ public class AsyncUserService {
     @Async
     public void asyncUpdatePassword(String email, String password){
         userService.updatePassword(email, password);
+    }
+
+    @Async
+    public void asyncChangePassword(String username, String password){
+        userService.changePassword(username, password);
+    }
+
+    @Async
+    public CompletableFuture<String> asyncGetPasswordByUsername(String username){
+        return CompletableFuture.completedFuture(userService.getPasswordByUsername(username));
     }
 }
