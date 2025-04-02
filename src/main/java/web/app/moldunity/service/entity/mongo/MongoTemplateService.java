@@ -5,11 +5,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ViewService {
+public class MongoTemplateService {
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public ViewService(MongoTemplate mongoTemplate) {
+    public MongoTemplateService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
