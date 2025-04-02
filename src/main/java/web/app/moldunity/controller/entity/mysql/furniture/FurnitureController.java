@@ -10,7 +10,7 @@ import web.app.moldunity.entity.mysql.furniture.Furniture;
 import web.app.moldunity.entity.mysql.furniture.FurnitureImage;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.util.CompletableFutureUtil;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class FurnitureController {
 
     @GetMapping(value = "/favorite/furniture/")
     public ResponseEntity<List<Furniture>> getFavorite(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityUtil.getUsername(), Furniture.class, "favoriteFurnitures"));
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Furniture.class, "favoriteFurnitures"));
     }
 
     @PostMapping(value = "/images/furniture/{id}",
@@ -52,7 +52,7 @@ public class FurnitureController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try {
             Furniture f = asyncEntityService.asyncGetById(id, Furniture.class).get();
-            if(null == f || !(f.getUsername().equals(SecurityUtil.getUsername()) || "ROLE_ADMIN".equals(SecurityUtil.getRole())))
+            if(null == f || !(f.getUsername().equals(SecurityContextHelper.getUsername()) || "ROLE_ADMIN".equals(SecurityContextHelper.getRole())))
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());

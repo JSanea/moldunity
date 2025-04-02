@@ -11,7 +11,7 @@ import web.app.moldunity.entity.mysql.user.User;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.EntityService;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +32,7 @@ public class FurnitureService {
     public ResponseEntity<Long> add(Furniture furniture){
         try {
             //**** get username form security context ****
-            String username = SecurityUtil.getUsername();
+            String username = SecurityContextHelper.getUsername();
             if (null == username || username.equals("anonymousUser")) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
 
             //**** add furniture entity ****

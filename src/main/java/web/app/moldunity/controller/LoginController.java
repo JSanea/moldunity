@@ -3,7 +3,7 @@ package web.app.moldunity.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 @RestController
 public class LoginController {
@@ -14,7 +14,7 @@ public class LoginController {
 
     @GetMapping(value = "/authenticate")
     public Boolean authenticate(){
-        return !SecurityUtil.getUsername().equals("anonymousUser");
+        return !SecurityContextHelper.getUsername().equals("anonymousUser");
     }
 }
 

@@ -1,11 +1,11 @@
-package web.app.moldunity.util;
+package web.app.moldunity.security;
 
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-public class SecurityUtil {
+public class SecurityContextHelper {
     public static String getUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
     }

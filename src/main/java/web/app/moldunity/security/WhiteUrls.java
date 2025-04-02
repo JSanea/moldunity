@@ -1,4 +1,4 @@
-package web.app.moldunity.util;
+package web.app.moldunity.security;
 
 public class WhiteUrls {
     public static String[] getUrls(){

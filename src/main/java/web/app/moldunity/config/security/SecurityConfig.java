@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import web.app.moldunity.security.MainAuthenticationProvider;
-import web.app.moldunity.util.WhiteUrls;
+import web.app.moldunity.security.WhiteUrls;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -33,7 +33,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(WhiteUrls.getUrls()).permitAll()
-                        .requestMatchers("/furniture-view").permitAll()
+                        .requestMatchers("/furniture-view", "/immobile-view").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")

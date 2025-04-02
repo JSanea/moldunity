@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import web.app.moldunity.enums.ChangePasswordStatus;
 import web.app.moldunity.service.async.AsyncUserService;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -28,7 +28,7 @@ public class ChangePasswordController {
     @PutMapping(value = "/change-password")
     public ChangePasswordStatus changePassword(@RequestBody Map<String, String> passwords){
         try {
-            String username = SecurityUtil.getUsername();
+            String username = SecurityContextHelper.getUsername();
             String password = asyncUserService.asyncGetPasswordByUsername(username).get();
             if(!passwordEncoder.matches(passwords.get("current"), password))
                 return ChangePasswordStatus.INVALID_CURRENT_PASSWORD;

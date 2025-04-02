@@ -10,7 +10,7 @@ import web.app.moldunity.entity.mysql.immobile.Immobile;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.util.CompletableFutureUtil;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
 
@@ -38,6 +38,6 @@ public class ImmobileController {
 
     @GetMapping(value = "/favorite/immobile/")
     public ResponseEntity<List<Immobile>> getFavorite(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityUtil.getUsername(), Immobile.class, "favoriteImmobiles"));
+        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Immobile.class, "favoriteImmobiles"));
     }
 }

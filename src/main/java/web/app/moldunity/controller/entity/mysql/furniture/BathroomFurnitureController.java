@@ -12,7 +12,7 @@ import web.app.moldunity.entity.mysql.furniture.bathroom.BathroomFurniture;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
 import web.app.moldunity.util.CompletableFutureUtil;
-import web.app.moldunity.util.SecurityUtil;
+import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +44,7 @@ public class BathroomFurnitureController {
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> add(@RequestBody Furniture furniture, @Value("${articles.limit}") Long limit) {
         try {
-            if(asyncEntityService.asyncGetCountOfUserArticles(SecurityUtil.getUsername(), Furniture.class).get() >= limit)
+            if(asyncEntityService.asyncGetCountOfUserArticles(SecurityContextHelper.getUsername(), Furniture.class).get() >= limit)
                 return new ResponseEntity<>(0L, HttpStatus.BAD_REQUEST);
         } catch (InterruptedException | ExecutionException e) {
            log.error(e.getMessage());
