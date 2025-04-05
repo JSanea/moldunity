@@ -1,7 +1,6 @@
 package web.app.moldunity.service.entity.mongo;
 
 import com.mongodb.client.result.DeleteResult;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public class MongoTemplateService {
-    @PersistenceContext
     private final MongoTemplate mongoTemplate;
 
     @Autowired
