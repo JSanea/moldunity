@@ -14,6 +14,7 @@ import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -27,7 +28,7 @@ public class FurnitureController {
     }
 
     @GetMapping(value = "/furniture/{id}")
-    public ResponseEntity<Furniture> getById(@PathVariable Long id){
+    public ResponseEntity<Optional<Furniture>> getById(@PathVariable Long id){
         return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Furniture.class));
     }
 
@@ -51,8 +52,8 @@ public class FurnitureController {
     @DeleteMapping(value = "/d/furniture/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
         try {
-            Furniture f = asyncEntityService.asyncGetById(id, Furniture.class).get();
-            if(null == f || !(f.getUsername().equals(SecurityContextHelper.getUsername()) || "ROLE_ADMIN".equals(SecurityContextHelper.getRole())))
+            Optional<Furniture> f = asyncEntityService.asyncGetById(id, Furniture.class).get();
+            if(f.isEmpty() || !(f.get().getUsername().equals(SecurityContextHelper.getUsername()) || "ROLE_ADMIN".equals(SecurityContextHelper.getRole())))
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());

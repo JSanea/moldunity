@@ -31,14 +31,13 @@ public class ForgotPasswordService {
     }
 
     public ForgotPasswordStatus sendCode(String email) {
-        Long TTL_MIN = 5L;
         try {
             if(!asyncUserService.asyncExistEmail(email).get())
                 return ForgotPasswordStatus.INVALID_EMAIL;
 
             Integer code = new Random().nextInt(900000) + 100000;
             codes.remove(email);
-            codes.put(email, new Expiry<>(code, TTL_MIN));
+            codes.put(email, new Expiry<>(code, 5L));
 
             emailSenderService.send(
                     email,
@@ -55,7 +54,8 @@ public class ForgotPasswordService {
     }
 
     public ForgotPasswordStatus updatePassword(String email, String password, Integer code){
-        if(!code.equals(codes.getItem(email)))
+        var c = codes.getItem(email);
+        if (c.isPresent() && !code.equals(c.get()))
             return ForgotPasswordStatus.INVALID_CODE;
         codes.remove(email);
         asyncUserService.asyncUpdatePassword(email, passwordEncoder.encode(password));

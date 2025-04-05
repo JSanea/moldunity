@@ -2,9 +2,9 @@ package web.app.moldunity.util;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 public class ExpiryMap<K, V> {
@@ -19,12 +19,9 @@ public class ExpiryMap<K, V> {
         return expiryMap.get(key);
     }
     
-    public V getItem(@NotNull K key){
+    public Optional<V> getItem(@NotNull K key){
         var v = expiryMap.get(key);
-        if(null != v)
-            return v.getSubject();
-
-        return null;
+        return Optional.ofNullable(v.getSubject());
     }
 
     public void remove(@NotNull K key){

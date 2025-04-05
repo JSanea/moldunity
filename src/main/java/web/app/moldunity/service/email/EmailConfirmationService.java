@@ -14,10 +14,8 @@ import java.util.Optional;
 
 @Service
 public class EmailConfirmationService {
-    private final Long TTL_MIN = 5L;
     @Value("${email.username}")
     private String FROM;
-    private final String EMAIL_SUBJECT = "Moldunity.md | Email Confirmation";
     private final EmailSenderService emailService;
     private final ExpiryMap<String, User> expiryUsers = new ExpiryMap<>();
 
@@ -31,26 +29,27 @@ public class EmailConfirmationService {
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){
-            if(user.getEmail().equals(expiryUsers.getItem(k).getEmail())){
+            if(expiryUsers.getItem(k).isEmpty())
+                continue;
+            if(user.getEmail().equals(expiryUsers.getItem(k).get().getEmail())){
                 expiryUsers.remove(k);
                 break;
             }
         }
 
-        expiryUsers.put(key, new Expiry<>(user, TTL_MIN));
+        expiryUsers.put(key, new Expiry<>(user, 5L));
 
         return emailService.send(
                 user.getEmail(),
                 FROM,
-                EMAIL_SUBJECT,
+                "Moldunity.md | Email Confirmation",
                 "Pentru a confirma email-ul accesati link-ul:\nhttp://localhost:8080/register?key=" + key
         );
     }
 
     public Optional<User> getUser(@NotNull String key){
-        User user = expiryUsers.getItem(key);
         expiryUsers.remove(key);
-        return user != null ? Optional.of(user) : Optional.empty();
+        return expiryUsers.getItem(key);
     }
 }
 

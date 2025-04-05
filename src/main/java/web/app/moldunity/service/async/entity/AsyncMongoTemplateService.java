@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.service.entity.mongo.MongoTemplateService;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -14,6 +15,11 @@ public class AsyncMongoTemplateService {
     @Autowired
     public AsyncMongoTemplateService(MongoTemplateService mongoTemplateService) {
         this.mongoTemplateService = mongoTemplateService;
+    }
+
+    @Async
+    public <T> CompletableFuture<Optional<T>> findById(String id, Class<T> entity){
+        return CompletableFuture.completedFuture(mongoTemplateService.findById(id, entity));
     }
 
     @Async

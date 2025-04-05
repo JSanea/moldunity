@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EntityService {
@@ -13,8 +14,8 @@ public class EntityService {
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public <T> T getById(Long id, Class<T> entity){
-        return entityManager.find(entity, id);
+    public <T> Optional<T> getById(Long id, Class<T> entity){
+        return Optional.ofNullable(entityManager.find(entity, id));
     }
 
     @Transactional(readOnly = true)

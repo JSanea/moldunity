@@ -13,6 +13,7 @@ import web.app.moldunity.util.CompletableFutureUtil;
 import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -27,7 +28,7 @@ public class ImmobileController {
     }
 
     @GetMapping(value = "/immobile/{id}")
-    public ResponseEntity<Immobile> getById(@PathVariable Long id){
+    public ResponseEntity<Optional<Immobile>> getById(@PathVariable Long id){
         return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Immobile.class));
     }
 

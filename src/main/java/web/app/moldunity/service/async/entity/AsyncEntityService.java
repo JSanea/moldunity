@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import web.app.moldunity.service.entity.EntityService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -17,7 +18,7 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> CompletableFuture<T> asyncGetById(Long id, Class<T> entity) {
+    public <T> CompletableFuture<Optional<T>> asyncGetById(Long id, Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getById(id, entity));
     }
 
