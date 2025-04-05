@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.app.moldunity.entity.mysql.user.User;
+import web.app.moldunity.enums.ConfirmUserStatus;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.email.EmailConfirmationService;
 import web.app.moldunity.util.CompletableFutureUtil;
@@ -37,21 +38,20 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> confirmUser(@RequestBody User user){
+    public ResponseEntity<ConfirmUserStatus> confirmUser(@RequestBody User user){
         try {
             if(asyncUserService.asyncExistUsername(user.getUsername()).get())
-                return new ResponseEntity<>("Username Already Exist", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>(ConfirmUserStatus.USERNAME_ALREADY_EXIST, HttpStatus.NOT_ACCEPTABLE);
             if(asyncUserService.asyncExistEmail(user.getEmail()).get())
-                return new ResponseEntity<>("Email Already Exist", HttpStatus.NOT_ACCEPTABLE);
-
+                return new ResponseEntity<>(ConfirmUserStatus.EMAIL_ALREADY_EXIST, HttpStatus.NOT_ACCEPTABLE);
         } catch (ExecutionException | InterruptedException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(ConfirmUserStatus.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return emailConfirmationService.sendEmail(user) ?
-                new ResponseEntity<>("OK", HttpStatus.OK):
-                new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+                new ResponseEntity<>(ConfirmUserStatus.SUCCESS, HttpStatus.OK):
+                new ResponseEntity<>(ConfirmUserStatus.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/register")
