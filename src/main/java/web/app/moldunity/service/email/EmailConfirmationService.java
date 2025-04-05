@@ -29,8 +29,6 @@ public class EmailConfirmationService {
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){
-            if(expiryUsers.getItem(k).isEmpty())
-                continue;
             if(user.getEmail().equals(expiryUsers.getItem(k).get().getEmail())){
                 expiryUsers.remove(k);
                 break;
