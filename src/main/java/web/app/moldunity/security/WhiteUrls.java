@@ -5,7 +5,7 @@ public class WhiteUrls {
         return new String[]{
                 "/user/**",
                 "/register",
-                "/authenticate",
+                "/is-authenticate",
                 "/verification-code",
                 "/update-password",
 

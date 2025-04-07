@@ -11,9 +11,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AsyncEntityService {
-    private final EntityService entityService;
+    private final EntityService<Long> entityService;
 
-    public AsyncEntityService(EntityService entityService) {
+    public AsyncEntityService(EntityService<Long> entityService) {
         this.entityService = entityService;
     }
 
@@ -64,8 +64,13 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> void asyncRemove(T t, Class<T> entity){
-        entityService.remove(t, entity);
+    public <T> void removeByIdAndUsername(Long id, String username, Class<T> entity){
+        entityService.removeByIdAndUsername(id, username, entity);
+    }
+
+    @Async
+    public <T> void asyncRemove(T t){
+        entityService.remove(t);
     }
 }
 

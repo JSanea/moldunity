@@ -12,8 +12,8 @@ public class LoginController {
         return new ModelAndView("login");
     }
 
-    @GetMapping(value = "/authenticate")
-    public Boolean authenticate(){
+    @GetMapping(value = "/is-authenticate")
+    public Boolean isAuthenticate(){
         return !SecurityContextHelper.getUsername().equals("anonymousUser");
     }
 }

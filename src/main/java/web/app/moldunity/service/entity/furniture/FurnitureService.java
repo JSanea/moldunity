@@ -31,7 +31,7 @@ public class FurnitureService {
     @Transactional
     public ResponseEntity<Long> add(Furniture furniture){
         try {
-            //**** get username form security context ****
+            //**** get username from security context ****
             String username = SecurityContextHelper.getUsername();
             if (null == username || username.equals("anonymousUser")) return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
 

@@ -1,10 +1,7 @@
 package web.app.moldunity.entity.mysql.furniture;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

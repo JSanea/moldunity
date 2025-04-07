@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@EnableMongoRepositories
+@EnableMongoRepositories(
+        basePackages = "web.app.moldunity.repository.mongo"
+)
 public class MongoConfig {
     @Bean
     public MongoClient mongoClient() {

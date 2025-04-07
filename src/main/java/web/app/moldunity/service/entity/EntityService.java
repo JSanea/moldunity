@@ -2,6 +2,7 @@ package web.app.moldunity.service.entity;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,12 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EntityService {
+@Slf4j
+public class EntityService<ID> {
     @PersistenceContext
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public <T> Optional<T> getById(Long id, Class<T> entity){
+    public <T> Optional<T> getById(ID id, Class<T> entity){
         return Optional.ofNullable(entityManager.find(entity, id));
     }
 
@@ -72,7 +74,7 @@ public class EntityService {
     }
 
     @Transactional
-    public <T> Boolean removeById(Long id, Class<T> entity){
+    public <T> Boolean removeById(ID id, Class<T> entity){
         T t = entityManager.find(entity, id);
         if(null == t) return false;
         entityManager.remove(t);
@@ -80,7 +82,21 @@ public class EntityService {
     }
 
     @Transactional
-    public <T> void remove(T t, Class<T> entity){
+    public <T> void removeByIdAndUsername(ID id, String username, Class<T> entity){
+        try {
+            T t = entityManager.createQuery("select x from " + entity.getSimpleName() + " x where x.id = ?1 and x.username = ?2", entity)
+                    .setParameter(1, id)
+                    .setParameter(2, username)
+                    .getSingleResult();
+            if(null != t)
+                entityManager.remove(t);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public <T> void remove(T t){
         entityManager.remove(t);
     }
 }
