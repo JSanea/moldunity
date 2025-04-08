@@ -18,11 +18,11 @@ import java.util.Optional;
 @RestController
 @Slf4j
 public class ImmobileController {
-    private final AsyncEntityService asyncEntityService;
+    private final AsyncEntityService<Long> asyncEntityService;
     private final AsyncUserService asyncUserService;
 
     @Autowired
-    public ImmobileController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService) {
+    public ImmobileController(AsyncEntityService<Long> asyncEntityService, AsyncUserService asyncUserService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
     }

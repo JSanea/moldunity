@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.app.moldunity.entity.mysql.furniture.Furniture;
 import web.app.moldunity.entity.mysql.user.User;
+import web.app.moldunity.security.SecurityContextHelper;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
-import web.app.moldunity.service.entity.EntityService;
-import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -19,11 +18,11 @@ import java.util.concurrent.ExecutionException;
 @Service
 @Slf4j
 public class FurnitureService {
-    private final AsyncEntityService asyncEntityService;
+    private final AsyncEntityService<Long> asyncEntityService;
     private final AsyncUserService asyncUserService;
 
     @Autowired
-    public FurnitureService(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, EntityService entityService) {
+    public FurnitureService(AsyncEntityService<Long> asyncEntityService, AsyncUserService asyncUserService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
     }

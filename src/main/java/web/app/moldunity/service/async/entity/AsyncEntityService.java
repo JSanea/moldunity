@@ -10,15 +10,15 @@ import java.util.concurrent.CompletableFuture;
 
 
 @Service
-public class AsyncEntityService {
-    private final EntityService<Long> entityService;
+public class AsyncEntityService<ID> {
+    private final EntityService<ID> entityService;
 
-    public AsyncEntityService(EntityService<Long> entityService) {
+    public AsyncEntityService(EntityService<ID> entityService) {
         this.entityService = entityService;
     }
 
     @Async
-    public <T> CompletableFuture<Optional<T>> asyncGetById(Long id, Class<T> entity) {
+    public <T> CompletableFuture<Optional<T>> asyncGetById(ID id, Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getById(id, entity));
     }
 
@@ -59,12 +59,12 @@ public class AsyncEntityService {
     }
 
     @Async
-    public <T> CompletableFuture<Boolean> asyncRemoveById(Long id, Class<T> entity) {
+    public <T> CompletableFuture<Boolean> asyncRemoveById(ID id, Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.removeById(id, entity));
     }
 
     @Async
-    public <T> void removeByIdAndUsername(Long id, String username, Class<T> entity){
+    public <T> void removeByIdAndUsername(ID id, String username, Class<T> entity){
         entityService.removeByIdAndUsername(id, username, entity);
     }
 

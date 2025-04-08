@@ -18,12 +18,12 @@ import web.app.moldunity.service.entity.furniture.FurnitureService;
 @RestController
 @Slf4j
 public class KitchenFurnitureController {
-    private final AsyncEntityService asyncEntityService;
+    private final AsyncEntityService<Long> asyncEntityService;
     private final AsyncUserService asyncUserService;
     private final FurnitureService furnitureService;
 
     @Autowired
-    public KitchenFurnitureController(AsyncEntityService asyncEntityService, AsyncUserService asyncUserService, FurnitureService furnitureService) {
+    public KitchenFurnitureController(AsyncEntityService<Long> asyncEntityService, AsyncUserService asyncUserService, FurnitureService furnitureService) {
         this.asyncEntityService = asyncEntityService;
         this.asyncUserService = asyncUserService;
         this.furnitureService = furnitureService;

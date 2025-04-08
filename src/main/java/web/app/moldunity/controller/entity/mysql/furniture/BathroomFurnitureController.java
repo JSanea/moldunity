@@ -20,11 +20,11 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @Slf4j
 public class BathroomFurnitureController {
-    private final AsyncEntityService asyncEntityService;
+    private final AsyncEntityService<Long> asyncEntityService;
     private final FurnitureService furnitureService;
 
     @Autowired
-    public BathroomFurnitureController(AsyncEntityService asyncEntityService, FurnitureService furnitureService) {
+    public BathroomFurnitureController(AsyncEntityService<Long> asyncEntityService, FurnitureService furnitureService) {
         this.asyncEntityService = asyncEntityService;
         this.furnitureService = furnitureService;
     }
@@ -45,7 +45,7 @@ public class BathroomFurnitureController {
     public ResponseEntity<Long> add(@RequestBody Furniture furniture, @Value("${articles.limit}") Long limit) {
         try {
             if(asyncEntityService.asyncGetCountOfUserArticles(SecurityContextHelper.getUsername(), Furniture.class).get() >= limit)
-                return new ResponseEntity<>(0L, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(-1L, HttpStatus.BAD_REQUEST);
         } catch (InterruptedException | ExecutionException e) {
            log.error(e.getMessage());
            return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);

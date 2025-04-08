@@ -18,10 +18,10 @@ import java.util.Optional;
 @RestController
 @Slf4j
 public class FurnitureController {
-    private final AsyncEntityService asyncEntityService;
+    private final AsyncEntityService<Long> asyncEntityService;
 
     @Autowired
-    public FurnitureController(AsyncEntityService asyncEntityService) {
+    public FurnitureController(AsyncEntityService<Long> asyncEntityService) {
         this.asyncEntityService = asyncEntityService;
     }
 
