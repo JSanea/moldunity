@@ -51,9 +51,9 @@ public class BathroomFurnitureController {
            return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        BathroomFurniture b = furniture.getBathroomFurnitures().get(0);
+        BathroomFurniture b = furniture.getBathroomFurniture();
         b.setFurniture(furniture);
-        furniture.setBathroomFurnitures(List.of(b));
+        furniture.setBathroomFurniture(b);
 
         return furnitureService.add(furniture);
     }

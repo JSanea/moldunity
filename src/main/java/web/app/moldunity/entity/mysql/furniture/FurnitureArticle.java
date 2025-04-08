@@ -14,7 +14,7 @@ public abstract class FurnitureArticle extends Article {
     @NotEmpty
     private String state;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "furniture_id")
     @JsonIgnore
     private Furniture furniture;

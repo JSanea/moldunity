@@ -10,5 +10,4 @@ import web.app.moldunity.entity.mysql.Favorite;
 @Entity
 @Table(name = "favorite_immobile")
 public class FavoriteImmobile extends Favorite<Immobile>{
-
 }

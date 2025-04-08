@@ -39,7 +39,8 @@ public class UserService extends BaseJpaService<User, Long> {
         if("ADMIN".equals(user.getRole()))
             return new User();
 
-        user.setPassword("********");
+        user.setIgnoredFields();
+
         return user;
     }
 

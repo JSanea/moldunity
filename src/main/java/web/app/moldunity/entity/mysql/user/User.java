@@ -3,6 +3,7 @@ package web.app.moldunity.entity.mysql.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ public class User extends UserArticle{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 16)
+    @Column(unique = true, length = 32)
+    @Size(min = 3, max = 32)
     @NotEmpty
     private String username;
 
@@ -26,6 +28,7 @@ public class User extends UserArticle{
     private String email;
 
     @Column(length = 256)
+    @Size(min = 8, max = 256)
     private String password;
 
     @NotEmpty
@@ -46,6 +49,12 @@ public class User extends UserArticle{
 
     private LocalDate lastLogonDate;
 
+    public void setIgnoredFields(){
+        this.password = null;
+        this.email = null;
+        this.role = null;
+        this.blocked = null;
+    }
 }
 
 

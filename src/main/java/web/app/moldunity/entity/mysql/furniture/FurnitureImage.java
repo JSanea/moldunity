@@ -11,7 +11,7 @@ import web.app.moldunity.entity.mysql.Image;
 @Table(name = "furniture_images")
 @EqualsAndHashCode(callSuper = true)
 public class FurnitureImage extends Image {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "furniture_id")
     @JsonIgnore
     private Furniture furniture;

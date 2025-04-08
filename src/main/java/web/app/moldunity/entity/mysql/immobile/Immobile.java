@@ -15,11 +15,11 @@ import java.util.List;
 @Table(name = "immobile")
 @EqualsAndHashCode(callSuper = true)
 public class Immobile extends Category {
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "immobile", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Apartament> apartaments;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "immobile", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Apartament apartament;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "immobile", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Home> homes;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "immobile", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Home home;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "immobile", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<ImmobileImage> immobileImages;

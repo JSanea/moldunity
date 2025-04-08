@@ -14,8 +14,6 @@ import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
 
-import java.util.List;
-
 
 @RestController
 @Slf4j
@@ -35,9 +33,9 @@ public class KitchenFurnitureController {
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> add(@RequestBody Furniture furniture){
-        KitchenFurniture k = furniture.getKitchenFurnitures().get(0);
+        KitchenFurniture k = furniture.getKitchenFurniture();
         k.setFurniture(furniture);
-        furniture.setKitchenFurnitures(List.of(k));
+        furniture.setKitchenFurniture(k);
 
         return furnitureService.add(furniture);
     }
