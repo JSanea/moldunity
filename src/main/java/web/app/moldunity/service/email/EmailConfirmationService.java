@@ -29,7 +29,7 @@ public class EmailConfirmationService {
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){
-            if(user.getEmail().equals(expiryUsers.getItem(k).get().getEmail())){
+            if(user.getEmail().equals(expiryUsers.get(k).get().getEmail())){
                 expiryUsers.remove(k);
                 break;
             }
@@ -46,8 +46,9 @@ public class EmailConfirmationService {
     }
 
     public Optional<User> getUser(@NotNull String key){
+        var u = expiryUsers.get(key);
         expiryUsers.remove(key);
-        return expiryUsers.getItem(key);
+        return u;
     }
 }
 

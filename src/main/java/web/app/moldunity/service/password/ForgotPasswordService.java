@@ -54,7 +54,7 @@ public class ForgotPasswordService {
     }
 
     public ForgotPasswordStatus updatePassword(String email, String password, Integer code){
-        var c = codes.getItem(email);
+        var c = codes.get(email);
         if (c.isPresent() && !code.equals(c.get()))
             return ForgotPasswordStatus.INVALID_CODE;
         codes.remove(email);

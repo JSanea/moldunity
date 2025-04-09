@@ -23,6 +23,7 @@ public abstract class Article {
     @NotEmpty
     private String location;
 
+    @Column(unique = true)
     @NotEmpty
     private String phone;
 }

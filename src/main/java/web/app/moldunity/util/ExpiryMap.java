@@ -19,7 +19,7 @@ public class ExpiryMap<K, V> {
         return expiryMap.get(key);
     }
     
-    public Optional<V> getItem(@NotNull K key){
+    public Optional<V> get(@NotNull K key){
         var v = expiryMap.get(key);
         return Optional.ofNullable(v.getSubject());
     }
