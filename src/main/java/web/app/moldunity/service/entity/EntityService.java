@@ -58,15 +58,15 @@ public class EntityService<ID> {
         return (Long) entityManager.createQuery("select count(x.id) from " + entity.getSimpleName() + " x").getSingleResult();
     }
 
-    @Transactional(readOnly = true)
-    public <T> Long getCountOfUserArticles(String username, Class<T> entity){
-        return entityManager.createQuery("select count(*) From " + entity.getSimpleName() + " x where x.username = ?1", Long.class)
+    @Transactional
+    public <T> T add(T t, String eId, String username, Long limit, Class<T> entity){
+        var cnt = entityManager.createQuery("select count(*) From " + entity.getSimpleName() + " x where x.username = ?1", Long.class)
                 .setParameter(1, username)
                 .getSingleResult();
-    }
 
-    @Transactional
-    public <T> T add(T t, String eId, Class<T> entity){
+        if(cnt >= limit)
+            return null;
+
         entityManager.persist(t);
         return entityManager.createQuery("select x From " + entity.getSimpleName() + " x where x.eId = ?1", entity)
                 .setParameter(1, eId)
@@ -82,7 +82,7 @@ public class EntityService<ID> {
     }
 
     @Transactional
-    public <T> void removeByIdAndUsername(ID id, String username, Class<T> entity){
+    public <T> Boolean removeByIdAndUsername(ID id, String username, Class<T> entity){
         try {
             T t = entityManager.createQuery("select x from " + entity.getSimpleName() + " x where x.id = ?1 and x.username = ?2", entity)
                     .setParameter(1, id)
@@ -90,8 +90,10 @@ public class EntityService<ID> {
                     .getSingleResult();
             if(null != t)
                 entityManager.remove(t);
+            return true;
         } catch (Exception e) {
             log.error(e.getMessage());
+            return false;
         }
     }
 

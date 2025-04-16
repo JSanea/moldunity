@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -18,19 +21,20 @@ public class EmailSenderService{
         this.emailSender = emailSender;
     }
 
-    public boolean send(String to, String from, String subject, String text){
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setFrom(from);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(text);
-
+    @Async
+    public CompletableFuture<Boolean> asyncSend(String to, String from, String subject, String text){
         try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setTo(to);
+            simpleMailMessage.setFrom(from);
+            simpleMailMessage.setSubject(subject);
+            simpleMailMessage.setText(text);
+
             emailSender.send(simpleMailMessage);
-            return true;
+            return CompletableFuture.completedFuture(true);
         } catch (MailException e) {
             log.error(e.getMessage());
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
     }
 }

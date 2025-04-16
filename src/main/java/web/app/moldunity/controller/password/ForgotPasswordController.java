@@ -6,6 +6,7 @@ import web.app.moldunity.enums.ForgotPasswordStatus;
 import web.app.moldunity.service.password.ForgotPasswordService;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class ForgotPasswordController {
@@ -17,7 +18,7 @@ public class ForgotPasswordController {
     }
 
     @GetMapping(value = "/verification-code")
-    public ForgotPasswordStatus getVerificationCode(@RequestParam("email") String email){
+    public CompletableFuture<ForgotPasswordStatus> getVerificationCode(@RequestParam("email") String email){
         return forgotPasswordService.sendCode(email);
     }
 

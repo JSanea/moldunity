@@ -3,17 +3,10 @@ package web.app.moldunity.entity.mysql.furniture;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import web.app.moldunity.entity.mysql.Category;
-import web.app.moldunity.entity.mysql.furniture.bathroom.BathroomFurniture;
-import web.app.moldunity.entity.mysql.furniture.dining.DiningFurniture;
-import web.app.moldunity.entity.mysql.furniture.kitchen.KitchenFurniture;
-import web.app.moldunity.entity.mysql.furniture.office.OfficeFurniture;
-import web.app.moldunity.entity.mysql.furniture.other.OtherFurniture;
-import web.app.moldunity.entity.mysql.furniture.sofa_armchair.SofaArmchair;
-import web.app.moldunity.entity.mysql.furniture.table_chair.TableChair;
-import web.app.moldunity.entity.mysql.furniture.wardrobe.Wardrobe;
 
 import java.util.List;
 
@@ -23,29 +16,23 @@ import java.util.List;
 @Table(name = "furniture")
 @EqualsAndHashCode(callSuper = true)
 public class Furniture extends Category {
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private KitchenFurniture kitchenFurniture;
+    @NotEmpty
+    private String price;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private BathroomFurniture bathroomFurniture;
+    private Integer view;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private DiningFurniture diningFurniture;
+    @NotEmpty
+    private String country;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private SofaArmchair sofaArmchair;
+    @NotEmpty
+    private String location;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private TableChair tableChair;
+    @Column(unique = true)
+    @NotEmpty
+    private String phone;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private Wardrobe wardrobe;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private OfficeFurniture officeFurniture;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
-    private OtherFurniture otherFurniture;
+    @NotEmpty
+    private String state;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "furniture", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<FurnitureImage> furnitureImages;

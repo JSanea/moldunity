@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import web.app.moldunity.entity.mysql.furniture.Furniture;
-import web.app.moldunity.entity.mysql.furniture.kitchen.KitchenFurniture;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
@@ -33,11 +32,12 @@ public class KitchenFurnitureController {
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> add(@RequestBody Furniture furniture){
-        KitchenFurniture k = furniture.getKitchenFurniture();
-        k.setFurniture(furniture);
-        furniture.setKitchenFurniture(k);
+//        KitchenFurniture k = furniture.getKitchenFurniture();
+//        k.setFurniture(furniture);
+//        furniture.setKitchenFurniture(k);
 
-        return furnitureService.add(furniture);
+         furnitureService.add(furniture);
+         return null;
     }
 }
 

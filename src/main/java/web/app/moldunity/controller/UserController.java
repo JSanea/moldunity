@@ -13,6 +13,7 @@ import web.app.moldunity.service.email.EmailConfirmationService;
 import web.app.moldunity.util.CompletableFutureUtil;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
@@ -38,20 +39,10 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ConfirmUserStatus> confirmUser(@RequestBody User user){
-        try {
-            if(asyncUserService.asyncExistUsername(user.getUsername()).get())
-                return new ResponseEntity<>(ConfirmUserStatus.USERNAME_ALREADY_EXIST, HttpStatus.NOT_ACCEPTABLE);
-            if(asyncUserService.asyncExistEmail(user.getEmail()).get())
-                return new ResponseEntity<>(ConfirmUserStatus.EMAIL_ALREADY_EXIST, HttpStatus.NOT_ACCEPTABLE);
-        } catch (ExecutionException | InterruptedException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(ConfirmUserStatus.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return emailConfirmationService.sendEmail(user) ?
-                new ResponseEntity<>(ConfirmUserStatus.SUCCESS, HttpStatus.OK):
-                new ResponseEntity<>(ConfirmUserStatus.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+    public CompletableFuture<ResponseEntity<ConfirmUserStatus>> confirmUser(@RequestBody User user){
+        return emailConfirmationService.sendEmail(user)
+                .thenApply(i -> i ?  ResponseEntity.status(HttpStatus.OK).body(ConfirmUserStatus.SUCCESS):
+                                     ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ConfirmUserStatus.ERROR));
     }
 
     @GetMapping(value = "/register")

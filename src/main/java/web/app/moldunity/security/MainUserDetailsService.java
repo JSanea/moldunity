@@ -9,41 +9,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.service.async.AsyncUserService;
-import web.app.moldunity.service.user.UserService;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
 public class MainUserDetailsService implements UserDetailsService {
     private final String ROLE_PREFIX = "ROLE_";
     private final AsyncUserService asyncUserService;
-    private final UserService userService;
+    private String password;
+    private String role;
 
     @Autowired
-    public MainUserDetailsService(AsyncUserService asyncUserService, UserService userService) {
+    public MainUserDetailsService(AsyncUserService asyncUserService) {
         this.asyncUserService = asyncUserService;
-        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String[] passwordAndRole;
-        try {
-            if (!asyncUserService.asyncExistUsername(username).get())
-                throw new UsernameNotFoundException("%s not found".formatted(username));
-            passwordAndRole = asyncUserService.asyncGetPasswordAndRoleByUsername(username).get();
-        } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
-      }
-
-        String password = passwordAndRole[0];
-        String role = passwordAndRole[1];
-
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+        asyncUserService.asyncExistUsername(username)
+                .thenCompose(exist -> {
+                    if(!exist)
+                        throw new UsernameNotFoundException("%s not found".formatted(username));
+                    return asyncUserService.asyncGetPasswordAndRoleByUsername(username);
+                })
+                        .thenAccept(passwordAndRole -> {
+                            password = passwordAndRole[0];
+                            role = passwordAndRole[1];
+                            authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+                        }).join();
 
         return new org.springframework.security.core.userdetails.User(username, password, authorities);
     }

@@ -23,7 +23,7 @@ public class AsyncEntityService<ID> {
     }
 
     @Async
-    public <T> CompletableFuture<T>  asyncGetByEId(String eId, Class<T> entity){
+    public <T> CompletableFuture<T>  asyncGetByEId(String eId, Class<T> entity) {
         return CompletableFuture.completedFuture(entityService.getByEId(eId, entity));
     }
 
@@ -44,18 +44,13 @@ public class AsyncEntityService<ID> {
     }
 
     @Async
-    public <T> CompletableFuture<Long> asyncGetCountOfUserArticles(String username, Class<T> entity){
-        return CompletableFuture.completedFuture(entityService.getCountOfUserArticles(username, entity));
-    }
-
-    @Async
     public <T> CompletableFuture<List<T>> asyncGetFavorite(String username, Class<T> entity, String favoriteField){
         return CompletableFuture.completedFuture(entityService.getFavorite(username, entity, favoriteField));
     }
 
     @Async
-    public <T> CompletableFuture<T> asyncAdd(T t, String eId, Class<T> entity) {
-        return CompletableFuture.completedFuture(entityService.add(t, eId, entity));
+    public <T> CompletableFuture<T> asyncAdd(T t, String eId, String username, Long limit, Class<T> entity) {
+        return CompletableFuture.completedFuture(entityService.add(t, eId, username, limit, entity));
     }
 
     @Async
@@ -64,13 +59,8 @@ public class AsyncEntityService<ID> {
     }
 
     @Async
-    public <T> void removeByIdAndUsername(ID id, String username, Class<T> entity){
-        entityService.removeByIdAndUsername(id, username, entity);
-    }
-
-    @Async
-    public <T> void asyncRemove(T t){
-        entityService.remove(t);
+    public <T> CompletableFuture<Boolean> asyncRemoveByIdAndUsername(ID id, String username, Class<T> entity){
+        return CompletableFuture.completedFuture(entityService.removeByIdAndUsername(id, username, entity));
     }
 }
 

@@ -12,6 +12,7 @@ import web.app.moldunity.util.Expiry;
 import web.app.moldunity.util.ExpiryMap;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -30,27 +31,25 @@ public class ForgotPasswordService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ForgotPasswordStatus sendCode(String email) {
-        try {
-            if(!asyncUserService.asyncExistEmail(email).get())
-                return ForgotPasswordStatus.INVALID_EMAIL;
+    public CompletableFuture<ForgotPasswordStatus> sendCode(String email) {
+            return asyncUserService.asyncExistEmail(email)
+                    .thenCompose(exist -> {
+                        if(!exist)
+                            return CompletableFuture.completedFuture(ForgotPasswordStatus.INVALID_EMAIL);
 
-            Integer code = new Random().nextInt(900000) + 100000;
-            codes.remove(email);
-            codes.put(email, new Expiry<>(code, 5L));
+                        Integer code = new Random().nextInt(900000) + 100000;
+                        codes.remove(email);
+                        codes.put(email, new Expiry<>(code, 5L));
 
-            emailSenderService.send(
-                    email,
-                    FROM,
-                    "Moldunity.md | Verification Code",
-                    "Verification code: " + code
-            );
-
-            return ForgotPasswordStatus.SUCCESS;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ForgotPasswordStatus.ERROR;
-        }
+                        return emailSenderService.asyncSend(
+                                email,
+                                FROM,
+                                "Moldunity.md | Verification Code",
+                                "Verification code: " + code
+                        ).thenApply(success -> success
+                                ? ForgotPasswordStatus.SUCCESS
+                                : ForgotPasswordStatus.ERROR);
+                    });
     }
 
     public ForgotPasswordStatus updatePassword(String email, String password, Integer code){

@@ -11,6 +11,7 @@ import web.app.moldunity.util.ExpiryMap;
 import web.app.moldunity.util.KeyGenerator;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class EmailConfirmationService {
@@ -24,12 +25,13 @@ public class EmailConfirmationService {
         this.emailService = emailService;
     }
 
-    public boolean sendEmail(@NotNull User user){
+    public CompletableFuture<Boolean> sendEmail(@NotNull User user){
         String key = KeyGenerator.generate(32);
 
         /** Check if already is sent and remove **/
         for(String k : expiryUsers.getKeySet()){
-            if(user.getEmail().equals(expiryUsers.get(k).get().getEmail())){
+            var v = expiryUsers.get(k);
+            if(v.isPresent() && user.getEmail().equals(v.get().getEmail())){
                 expiryUsers.remove(k);
                 break;
             }
@@ -37,7 +39,7 @@ public class EmailConfirmationService {
 
         expiryUsers.put(key, new Expiry<>(user, 5L));
 
-        return emailService.send(
+        return emailService.asyncSend(
                 user.getEmail(),
                 FROM,
                 "Moldunity.md | Email Confirmation",

@@ -1,15 +1,18 @@
 package web.app.moldunity.service.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.app.moldunity.entity.mysql.user.User;
+import web.app.moldunity.enums.ChangePasswordStatus;
 import web.app.moldunity.repository.mysql.UserRepository;
 import web.app.moldunity.service.BaseJpaService;
 
 import java.time.LocalDate;
 
 @Service
+@Slf4j
 public class UserService extends BaseJpaService<User, Long> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -72,7 +75,15 @@ public class UserService extends BaseJpaService<User, Long> {
         userRepository.updatePassword(email, password);
     }
 
-    public void changePassword(String username, String password){
-        userRepository.changePassword(username, password);
+    public ChangePasswordStatus changePassword(String username, String currentPassword, String newPassword){
+        if(!passwordEncoder.matches(userRepository.getPasswordByUsername(username), currentPassword))
+            return ChangePasswordStatus.INVALID_CURRENT_PASSWORD;
+        try {
+            userRepository.changePassword(username, newPassword);
+            return ChangePasswordStatus.SUCCESS;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ChangePasswordStatus.ERROR;
+        }
     }
 }

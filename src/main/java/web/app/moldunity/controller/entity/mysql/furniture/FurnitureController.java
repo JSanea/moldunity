@@ -2,6 +2,7 @@ package web.app.moldunity.controller.entity.mysql.furniture;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,35 +10,51 @@ import web.app.moldunity.entity.mysql.furniture.Furniture;
 import web.app.moldunity.entity.mysql.furniture.FurnitureImage;
 import web.app.moldunity.security.SecurityContextHelper;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
-import web.app.moldunity.util.CompletableFutureUtil;
+import web.app.moldunity.service.entity.furniture.FurnitureService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @Slf4j
 public class FurnitureController {
     private final AsyncEntityService<Long> asyncEntityService;
+    private final FurnitureService furnitureService;
 
     @Autowired
-    public FurnitureController(AsyncEntityService<Long> asyncEntityService) {
+    public FurnitureController(AsyncEntityService<Long> asyncEntityService, FurnitureService furnitureService) {
         this.asyncEntityService = asyncEntityService;
+        this.furnitureService = furnitureService;
     }
 
     @GetMapping(value = "/furniture/{id}")
-    public ResponseEntity<Optional<Furniture>> getById(@PathVariable Long id){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Furniture.class));
+    public CompletableFuture<ResponseEntity<Furniture>> getById(@PathVariable Long id){
+        return asyncEntityService.asyncGetById(id, Furniture.class)
+                .thenApply(f -> f.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()));
     }
 
     @GetMapping(value = "/furniture/count")
-    public ResponseEntity<Long> getNumRecords(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetNumRecords(Furniture.class));
+    public CompletableFuture<ResponseEntity<Long>> getNumRecords(){
+        return asyncEntityService.asyncGetNumRecords(Furniture.class)
+                .thenApply(ResponseEntity::ok);
     }
 
     @GetMapping(value = "/favorite/furniture/")
-    public ResponseEntity<List<Furniture>> getFavorite(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Furniture.class, "favoriteFurnitures"));
+    public CompletableFuture<ResponseEntity<List<Furniture>>> getFavorite(){
+        return asyncEntityService.asyncGetFavorite(
+                SecurityContextHelper.getUsername(),
+                Furniture.class,
+                "favoriteFurnitures").thenApply(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "/add/furniture",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public CompletableFuture<ResponseEntity<Furniture>> add(@RequestBody Furniture furniture) {
+        return furnitureService.add(furniture)
+                .thenApply(f -> null == f ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Furniture()):
+                        ResponseEntity.status(HttpStatus.CREATED).body(f));
     }
 
     @PostMapping(value = "/images/furniture/{id}",
@@ -48,8 +65,12 @@ public class FurnitureController {
     }
 
     @DeleteMapping(value = "/d/furniture/{id}")
-    public void delete(@PathVariable Long id){
-        asyncEntityService.removeByIdAndUsername(id, SecurityContextHelper.getUsername(), Furniture.class);
+    public CompletableFuture<Boolean> delete(@PathVariable Long id){
+        return asyncEntityService.asyncRemoveByIdAndUsername(
+                id,
+                SecurityContextHelper.getUsername(),
+                Furniture.class
+        );
     }
 }
 
