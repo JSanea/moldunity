@@ -49,6 +49,10 @@ public class ForgotPasswordService {
                         ).thenApply(success -> success
                                 ? ForgotPasswordStatus.SUCCESS
                                 : ForgotPasswordStatus.ERROR);
+                    })
+                    .exceptionally(ex -> {
+                        log.error(ex.getMessage());
+                        return ForgotPasswordStatus.ERROR;
                     });
     }
 
@@ -56,9 +60,16 @@ public class ForgotPasswordService {
         var c = codes.get(email);
         if (c.isPresent() && !code.equals(c.get()))
             return ForgotPasswordStatus.INVALID_CODE;
+
         codes.remove(email);
-        asyncUserService.asyncUpdatePassword(email, passwordEncoder.encode(password));
-        return ForgotPasswordStatus.SUCCESS;
+
+        try {
+            asyncUserService.asyncUpdatePassword(email, passwordEncoder.encode(password));
+            return ForgotPasswordStatus.SUCCESS;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ForgotPasswordStatus.ERROR;
+        }
     }
 }
 

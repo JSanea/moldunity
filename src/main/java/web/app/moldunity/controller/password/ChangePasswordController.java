@@ -28,10 +28,11 @@ public class ChangePasswordController {
 
     @PutMapping(value = "/change-password")
     public CompletableFuture<ResponseEntity<ChangePasswordStatus>> changePassword(@RequestBody Map<String, String> passwords){
-        return asyncUserService.asyncChangePassword(
-                SecurityContextHelper.getUsername(),
-                passwords.get("current"),
-                passwords.get("new")
-        ).thenApply(ResponseEntity::ok);
+        return asyncUserService.asyncChangePassword(SecurityContextHelper.getUsername(), passwords.get("current"), passwords.get("new"))
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.internalServerError().body(ChangePasswordStatus.ERROR);
+                });
     }
 }

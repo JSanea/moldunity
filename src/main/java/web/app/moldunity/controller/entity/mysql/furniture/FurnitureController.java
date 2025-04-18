@@ -12,6 +12,7 @@ import web.app.moldunity.security.SecurityContextHelper;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 import web.app.moldunity.service.entity.furniture.FurnitureService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -31,21 +32,31 @@ public class FurnitureController {
     @GetMapping(value = "/furniture/{id}")
     public CompletableFuture<ResponseEntity<Furniture>> getById(@PathVariable Long id){
         return asyncEntityService.asyncGetById(id, Furniture.class)
-                .thenApply(f -> f.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()));
+                .thenApply(f -> f.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()))
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Furniture());
+                });
     }
 
     @GetMapping(value = "/furniture/count")
     public CompletableFuture<ResponseEntity<Long>> getNumRecords(){
         return asyncEntityService.asyncGetNumRecords(Furniture.class)
-                .thenApply(ResponseEntity::ok);
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0L);
+                });
     }
 
     @GetMapping(value = "/favorite/furniture/")
     public CompletableFuture<ResponseEntity<List<Furniture>>> getFavorite(){
-        return asyncEntityService.asyncGetFavorite(
-                SecurityContextHelper.getUsername(),
-                Furniture.class,
-                "favoriteFurnitures").thenApply(ResponseEntity::ok);
+        return asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Furniture.class, "favoriteFurnitures")
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+                });
     }
 
     @PostMapping(value = "/add/furniture",
@@ -54,7 +65,11 @@ public class FurnitureController {
     public CompletableFuture<ResponseEntity<Furniture>> add(@RequestBody Furniture furniture) {
         return furnitureService.add(furniture)
                 .thenApply(f -> null == f ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Furniture()):
-                        ResponseEntity.status(HttpStatus.CREATED).body(f));
+                        ResponseEntity.status(HttpStatus.CREATED).body(f))
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Furniture());
+                });
     }
 
     @PostMapping(value = "/images/furniture/{id}",
@@ -65,12 +80,14 @@ public class FurnitureController {
     }
 
     @DeleteMapping(value = "/d/furniture/{id}")
-    public CompletableFuture<Boolean> delete(@PathVariable Long id){
-        return asyncEntityService.asyncRemoveByIdAndUsername(
-                id,
-                SecurityContextHelper.getUsername(),
-                Furniture.class
-        );
+    public CompletableFuture<ResponseEntity<Boolean>> delete(@PathVariable Long id){
+        return asyncEntityService.asyncRemoveByIdAndUsername(id, SecurityContextHelper.getUsername(), Furniture.class)
+                .thenApply(r -> r ? ResponseEntity.status(HttpStatus.OK).body(true) :
+                                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false))
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+                });
     }
 }
 

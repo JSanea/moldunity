@@ -34,11 +34,11 @@ public class MainUserDetailsService implements UserDetailsService {
                         throw new UsernameNotFoundException("%s not found".formatted(username));
                     return asyncUserService.asyncGetPasswordAndRoleByUsername(username);
                 })
-                        .thenAccept(passwordAndRole -> {
-                            password = passwordAndRole[0];
-                            role = passwordAndRole[1];
-                            authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
-                        }).join();
+                .thenAccept(passwordAndRole -> {
+                    password = passwordAndRole[0];
+                    role = passwordAndRole[1];
+                    authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+                }).join();
 
         return new org.springframework.security.core.userdetails.User(username, password, authorities);
     }
