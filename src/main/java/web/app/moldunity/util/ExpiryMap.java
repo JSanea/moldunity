@@ -21,7 +21,7 @@ public class ExpiryMap<K, V> {
     
     public Optional<V> get(@NotNull K key){
         var v = expiryMap.get(key);
-        return Optional.ofNullable(v.getSubject());
+        return null != v ? Optional.ofNullable(v.getSubject()) : Optional.empty();
     }
 
     public void remove(@NotNull K key){

@@ -88,8 +88,11 @@ public class EntityService<ID> {
                     .setParameter(1, id)
                     .setParameter(2, username)
                     .getSingleResult();
-            if(null != t)
-                entityManager.remove(t);
+
+            if (null == t)
+                return false;
+
+            entityManager.remove(t);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage());

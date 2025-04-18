@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import web.app.moldunity.entity.mysql.immobile.Immobile;
+import web.app.moldunity.security.SecurityContextHelper;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
-import web.app.moldunity.util.CompletableFutureUtil;
-import web.app.moldunity.security.SecurityContextHelper;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @Slf4j
@@ -28,17 +27,43 @@ public class ImmobileController {
     }
 
     @GetMapping(value = "/immobile/{id}")
-    public ResponseEntity<Optional<Immobile>> getById(@PathVariable Long id){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetById(id, Immobile.class));
+    public CompletableFuture<ResponseEntity<Immobile>> getById(@PathVariable Long id){
+        return asyncEntityService.asyncGetById(id, Immobile.class)
+                .thenApply(m -> m.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()));
     }
 
     @GetMapping(value = "/immobile/count")
-    public ResponseEntity<Long> getNumRecords(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetNumRecords(Immobile.class));
+    public CompletableFuture<ResponseEntity<Long>> getNumRecords(){
+        return asyncEntityService.asyncGetNumRecords(Immobile.class)
+                .thenApply(ResponseEntity::ok);
     }
 
     @GetMapping(value = "/favorite/immobile/")
-    public ResponseEntity<List<Immobile>> getFavorite(){
-        return CompletableFutureUtil.exceptionWrapper(asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Immobile.class, "favoriteImmobiles"));
+    public CompletableFuture<ResponseEntity<List<Immobile>>> getFavorite(){
+        return asyncEntityService.asyncGetFavorite(
+                SecurityContextHelper.getUsername(),
+                Immobile.class,
+                "favoriteImmobiles").thenApply(ResponseEntity::ok);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

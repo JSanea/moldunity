@@ -10,11 +10,9 @@ import web.app.moldunity.entity.mysql.user.User;
 import web.app.moldunity.enums.ConfirmUserStatus;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.email.EmailConfirmationService;
-import web.app.moldunity.util.CompletableFutureUtil;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -30,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/user/{username}")
-    public ResponseEntity<User> getByUsername(@PathVariable String username){
-        return CompletableFutureUtil.exceptionWrapper(asyncUserService.asyncGetByName(username));
+    public CompletableFuture<User> getByUsername(@PathVariable String username){
+        return asyncUserService.asyncGetByName(username);
     }
 
     @PostMapping(
@@ -40,21 +38,55 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public CompletableFuture<ResponseEntity<ConfirmUserStatus>> confirmUser(@RequestBody User user){
-        return emailConfirmationService.sendEmail(user)
-                .thenApply(i -> i ?  ResponseEntity.status(HttpStatus.OK).body(ConfirmUserStatus.SUCCESS):
-                                     ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ConfirmUserStatus.ERROR));
+        var existsNameFuture = asyncUserService.asyncExistUsername(user.getUsername());
+        var existsEmailFuture =  asyncUserService.asyncExistEmail(user.getEmail());
+
+        return existsNameFuture.thenCombine(existsEmailFuture, (usernameExists, emailExists) -> {
+            if (usernameExists) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                        .body(ConfirmUserStatus.USERNAME_EXISTS);
+            }
+
+            if (emailExists) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                        .body(ConfirmUserStatus.EMAIL_EXISTS);
+            }
+            return null;
+        }).thenCompose(result -> {
+            if (result != null) {
+                return CompletableFuture.completedFuture(result);
+            }
+
+            return emailConfirmationService.sendEmail(user)
+                    .thenApply(success -> success
+                            ? ResponseEntity.status(HttpStatus.OK).body(ConfirmUserStatus.SUCCESS)
+                            : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ConfirmUserStatus.ERROR));
+        });
     }
 
     @GetMapping(value = "/register")
-    public ResponseEntity<Long> registerUser(@RequestParam String key){
+    public CompletableFuture<User> registerUser(@RequestParam String key){
         Optional<User> user = emailConfirmationService.getUser(key);
-        try {
-            return user.isPresent() ?
-                    new ResponseEntity<>(asyncUserService.asyncAddUser(user.get()).get().getId(), HttpStatus.OK) :
-                    new ResponseEntity<>(0L, HttpStatus.NOT_FOUND);
-        } catch (ExecutionException | InterruptedException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(0L, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return user.map(asyncUserService::asyncAddUser).orElse(CompletableFuture.completedFuture(null));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
