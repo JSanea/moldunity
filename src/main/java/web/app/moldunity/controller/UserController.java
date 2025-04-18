@@ -61,6 +61,9 @@ public class UserController {
                     .thenApply(success -> success
                             ? ResponseEntity.status(HttpStatus.OK).body(ConfirmUserStatus.SUCCESS)
                             : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ConfirmUserStatus.ERROR));
+        }).exceptionally(ex -> {
+            log.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ConfirmUserStatus.ERROR);
         });
     }
 

@@ -11,6 +11,7 @@ import web.app.moldunity.security.SecurityContextHelper;
 import web.app.moldunity.service.async.AsyncUserService;
 import web.app.moldunity.service.async.entity.AsyncEntityService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,21 +30,31 @@ public class ImmobileController {
     @GetMapping(value = "/immobile/{id}")
     public CompletableFuture<ResponseEntity<Immobile>> getById(@PathVariable Long id){
         return asyncEntityService.asyncGetById(id, Immobile.class)
-                .thenApply(m -> m.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()));
+                .thenApply(m -> m.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()))
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.internalServerError().body(new Immobile());
+                });
     }
 
     @GetMapping(value = "/immobile/count")
     public CompletableFuture<ResponseEntity<Long>> getNumRecords(){
         return asyncEntityService.asyncGetNumRecords(Immobile.class)
-                .thenApply(ResponseEntity::ok);
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.internalServerError().body(0L);
+                });
     }
 
     @GetMapping(value = "/favorite/immobile/")
     public CompletableFuture<ResponseEntity<List<Immobile>>> getFavorite(){
-        return asyncEntityService.asyncGetFavorite(
-                SecurityContextHelper.getUsername(),
-                Immobile.class,
-                "favoriteImmobiles").thenApply(ResponseEntity::ok);
+        return asyncEntityService.asyncGetFavorite(SecurityContextHelper.getUsername(), Immobile.class, "favoriteImmobiles")
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> {
+                    log.error(ex.getMessage());
+                    return ResponseEntity.internalServerError().body(new ArrayList<>());
+                });
     }
 }
 

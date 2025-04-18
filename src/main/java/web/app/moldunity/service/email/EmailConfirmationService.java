@@ -2,6 +2,7 @@ package web.app.moldunity.service.email;
 
 
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class EmailConfirmationService {
     @Value("${email.username}")
     private String FROM;
@@ -44,7 +46,10 @@ public class EmailConfirmationService {
                 FROM,
                 "Moldunity.md | Email Confirmation",
                 "Pentru a confirma email-ul accesati link-ul:\nhttp://localhost:8080/register?key=" + key
-        );
+        ).exceptionally(ex -> {
+            log.error(ex.getMessage());
+            return false;
+        });
     }
 
     public Optional<User> getUser(@NotNull String key){
