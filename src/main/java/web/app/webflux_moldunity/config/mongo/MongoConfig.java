@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
-import java.util.concurrent.TimeUnit;
-
 @Configuration
 public class MongoConfig {
     @Bean
@@ -18,8 +16,7 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString("mongodb://localhost:27017"))
                 .applyToConnectionPoolSettings(builder -> builder
                                 .maxSize(64)
-                                .minSize(4)
-                                .maxConnectionIdleTime(60, TimeUnit.SECONDS))
+                                .minSize(4))
                 .build();
 
         return MongoClients.create(settings);
