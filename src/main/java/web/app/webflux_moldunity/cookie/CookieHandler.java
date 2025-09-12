@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class CookieHandler {
-    private final CookieProperties authCookieProperties;
+    private final CookieProperties cookieProperties;
 
     public ResponseCookie createCookie(String name, String value, Long maxAge){
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
-                .secure(authCookieProperties.isSecure()) // true in production
+                .secure(cookieProperties.isSecure()) // true in production
                 .path("/")
                 .maxAge(maxAge)
                 .sameSite("Strict")
