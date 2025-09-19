@@ -16,7 +16,7 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 import web.app.webflux_moldunity.dto.Profile;
 import web.app.webflux_moldunity.dto.UserProfile;
-import web.app.webflux_moldunity.entity.user.User;
+import web.app.webflux_moldunity.entity.postgres.user.User;
 import web.app.webflux_moldunity.enums.ChangePasswordStatus;
 import web.app.webflux_moldunity.exception.UserServiceException;
 

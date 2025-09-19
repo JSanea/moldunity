@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import web.app.webflux_moldunity.entity.user.User;
+import web.app.webflux_moldunity.entity.postgres.user.User;
 import web.app.webflux_moldunity.service.UserService;
 import web.app.webflux_moldunity.service.email.EmailConfirmationService;
 

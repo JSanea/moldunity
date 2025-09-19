@@ -1,11 +1,11 @@
-package web.app.webflux_moldunity.entity.real_estate;
+package web.app.webflux_moldunity.entity.postgres.real_estate;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-import web.app.webflux_moldunity.entity.ad.Subcategory;
+import web.app.webflux_moldunity.entity.postgres.ad.Subcategory;
 
 @Getter
 @Setter

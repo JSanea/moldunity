@@ -1,4 +1,4 @@
-package web.app.webflux_moldunity.entity.ad;
+package web.app.webflux_moldunity.entity.postgres.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -10,12 +10,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Table(name = "reports")
-public class AdReport {
+@Table(name = "blocked_users")
+public class BlockedUser {
     @Id
     private Long id;
     @NotBlank private String reason;
     private Long userId;
-    private Long adId;
     private LocalDateTime createdAt;
 }

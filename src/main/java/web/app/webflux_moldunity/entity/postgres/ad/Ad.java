@@ -1,4 +1,4 @@
-package web.app.webflux_moldunity.entity.ad;
+package web.app.webflux_moldunity.entity.postgres.ad;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

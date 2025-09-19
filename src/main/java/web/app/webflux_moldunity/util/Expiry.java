@@ -1,7 +1,6 @@
 package web.app.webflux_moldunity.util;
 
 import jakarta.validation.constraints.NotNull;
-import web.app.webflux_moldunity.entity.user.User;
 
 import java.time.Duration;
 import java.time.Instant;

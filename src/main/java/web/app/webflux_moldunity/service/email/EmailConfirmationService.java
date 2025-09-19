@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.webflux_moldunity.entity.user.User;
+import web.app.webflux_moldunity.entity.postgres.user.User;
 import web.app.webflux_moldunity.util.Expiry;
 import web.app.webflux_moldunity.util.ExpiryMap;
 

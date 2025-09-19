@@ -1,4 +1,4 @@
-package web.app.webflux_moldunity.entity.transport;
+package web.app.webflux_moldunity.entity.postgres.transport;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

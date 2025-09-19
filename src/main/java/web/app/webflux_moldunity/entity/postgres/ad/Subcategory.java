@@ -1,12 +1,12 @@
-package web.app.webflux_moldunity.entity.ad;
+package web.app.webflux_moldunity.entity.postgres.ad;
 
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import web.app.webflux_moldunity.entity.real_estate.Apartment;
-import web.app.webflux_moldunity.entity.real_estate.Home;
-import web.app.webflux_moldunity.entity.transport.BusMinibus;
-import web.app.webflux_moldunity.entity.transport.Car;
+import web.app.webflux_moldunity.entity.postgres.real_estate.Apartment;
+import web.app.webflux_moldunity.entity.postgres.real_estate.Home;
+import web.app.webflux_moldunity.entity.postgres.transport.BusMinibus;
+import web.app.webflux_moldunity.entity.postgres.transport.Car;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

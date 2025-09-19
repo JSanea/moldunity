@@ -1,4 +1,4 @@
-package web.app.webflux_moldunity.entity.user;
+package web.app.webflux_moldunity.entity.postgres.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.r2dbc.spi.Row;

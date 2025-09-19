@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import web.app.webflux_moldunity.entity.ad.AdImage;
+import web.app.webflux_moldunity.entity.postgres.ad.AdImage;
 import web.app.webflux_moldunity.service.AdService;
 import web.app.webflux_moldunity.util.ImageConverterUtil;
 import web.app.webflux_moldunity.util.ImageFormatUtil;
