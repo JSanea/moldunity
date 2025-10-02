@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-*.idea
+/moldunity/backend.idea/
 *.iws
 *.iml
 *.ipr
