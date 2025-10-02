@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS ad_images (
+    id            BIGSERIAL  PRIMARY KEY,
+    url           VARCHAR(256) NOT NULL UNIQUE,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ad_id BIGINT  NOT NULL,
+    FOREIGN KEY (ad_id) REFERENCES ads(id) ON DELETE CASCADE
+);

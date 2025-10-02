@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <!-- SQL -->
+    <include file="src/main/resources/db/changelog/001-create-user-table.sql" />
+    <include file="src/main/resources/db/changelog/002-create-ad-table.sql" />
+    <include file="src/main/resources/db/changelog/003-create-ad-images-table.sql" />
+    <include file="src/main/resources/db/changelog/004-create-car-table.sql" />
+    <include file="src/main/resources/db/changelog/005-create-favorite-ads-table.sql"/>
+
+    <include file="src/main/resources/db/changelog/ads-create-fulltext-index.xml" />
+    <include file="src/main/resources/db/changelog/cars-create-fulltext-index.xml" />
+    <include file="src/main/resources/db/changelog/create-ads-idx-subcategory-republished.xml" />
+
+
+</databaseChangeLog>

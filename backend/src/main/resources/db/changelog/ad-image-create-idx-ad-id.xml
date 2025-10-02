@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="20250505-02" author="Admin">
+        <sql>
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM pg_indexes
+                    WHERE tablename = 'ad_images' AND indexname = 'idx_ad_images_ad_id'
+            ) THEN
+                    CREATE INDEX idx_ad_images_ad_id ON ad_images(ad_id);
+                END IF;
+            END$$;
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>
