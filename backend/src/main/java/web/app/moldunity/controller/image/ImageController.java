@@ -28,7 +28,7 @@ public class ImageController {
     private final ImageService imageService;
     private final AdService adService;
 
-    @PostMapping(value = "/images/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/ads/{adId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<ResponseEntity<String>> save(@PathVariable Long id,
                                              @RequestPart("images") List<FilePart> images){
         long size = images.size();
