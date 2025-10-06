@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Component
 public class FilterMap {
-    private final Map<String, EntityFilter> filterMap = Map.of(
+    private static final Map<String, EntityFilter> filterMap = Map.of(
             "Car", new CarFilter(),
             "Bus-Minibus", new BusMinibusFilter()
     );
