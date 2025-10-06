@@ -43,7 +43,7 @@ public class OwnershipFilter implements WebFilter {
     }
 
     private boolean checkPath(String path, HttpMethod method){
-        return (path.matches("^api/ads/\\d+/images$")  && method == HttpMethod.POST)
+        return (path.matches("^api/images/ads/\\d+$")  && method == HttpMethod.POST)
                 || (path.matches("^api/republish/ads/\\d+$") && method == HttpMethod.POST)
                 || (path.matches("^api/edit/ads/\\d+$") && method == HttpMethod.PUT)
                 || (path.matches("^api/edit/ads/\\d+$") && method == HttpMethod.DELETE);
