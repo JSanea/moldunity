@@ -4,6 +4,8 @@ import reactor.core.publisher.Mono;
 
 import java.io.File;
 
-public interface ReactiveUploadService {
+public interface ReactiveFileService {
     Mono<String> upload(Long adId,  File file);
+
+    Mono<Void> deleteAll(String prefix);
 }

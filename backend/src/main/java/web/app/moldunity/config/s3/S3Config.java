@@ -11,6 +11,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Configuration;
 
+import java.net.URI;
 import java.time.Duration;
 
 @Configuration
@@ -25,10 +26,10 @@ public class S3Config {
     @Bean
     public S3AsyncClient s3AsyncClient() {
         SdkAsyncHttpClient sdkAsyncHttpClient = NettyNioAsyncHttpClient.builder()
-                .maxConcurrency(128)
+                .maxConcurrency(32)
                 .connectionAcquisitionTimeout(Duration.ofSeconds(5))
                 .connectionTimeout(Duration.ofSeconds(5))
-                .maxPendingConnectionAcquires(128)
+                .maxPendingConnectionAcquires(32)
                 .tcpKeepAlive(true)
                 .build();
 

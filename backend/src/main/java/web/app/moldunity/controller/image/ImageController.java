@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.service.AdService;
+import web.app.moldunity.service.image.ImageConvertService;
 import web.app.moldunity.service.image.ImageService;
 import web.app.moldunity.util.FilePartUtil;
 
@@ -26,6 +27,7 @@ public class ImageController {
     @Value("${images.limit}")
     private Long limit;
     private final ImageService imageService;
+    private final ImageConvertService imageConvertService;
     private final AdService adService;
 
     @PostMapping(value = "/images/ads/{adId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -41,9 +43,9 @@ public class ImageController {
                 .flatMap(cnt -> cnt >= limit || size > limit - cnt
                         ? Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image limit exceeded"))
                         : FilePartUtil.filePartsToFiles(images))
-                .flatMap(imageService::convertImages)
+                .flatMap(imageConvertService::convertImages)
                 .flatMapMany(Flux::fromIterable)
-                .flatMap(webp -> imageService.saveWebp(id, webp))
+                .flatMap(webp -> imageService.save(id, webp))
                 .then(Mono.just(ResponseEntity.ok("Files uploaded successfully")))
                 .onErrorResume(e -> {
                     if (e instanceof ResponseStatusException ex) {

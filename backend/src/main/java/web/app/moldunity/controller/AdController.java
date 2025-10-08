@@ -144,7 +144,7 @@ public class AdController {
     @PostMapping(value = "/ads",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<AdDetails>> add(@Valid @RequestBody AdDetails adDetails) {
+    public Mono<ResponseEntity<AdDetails>> create(@Valid @RequestBody AdDetails adDetails) {
         if (adDetails.subcategory() == null) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
