@@ -1,11 +1,14 @@
-package web.app.moldunity.service.image;
+package web.app.moldunity.service.image.s3;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.entity.postgres.ad.AdImage;
+import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
 import web.app.moldunity.service.AdService;
+import web.app.moldunity.service.image.ReactiveFileService;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ImageService {
+public class S3ImageService {
     private final ReactiveFileService fileService;
     private final AdService adService;
 
@@ -39,6 +42,11 @@ public class ImageService {
     public Mono<Void> deleteAll(Long adId){
         String prefix = "ads/" + adId + "/";
         return fileService.deleteAll(prefix);
+    }
+
+    @EventListener
+    public Mono<Void> deleteAllEvent(S3AdImagesDeleteAllEvent deleteAllEvent){
+        return deleteAll(deleteAllEvent.adId());
     }
 }
 

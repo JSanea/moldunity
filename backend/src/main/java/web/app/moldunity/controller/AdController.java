@@ -189,7 +189,7 @@ public class AdController {
                 });
     }
 
-    @PutMapping(value = "/edit/ads/{id}",
+    @PutMapping(value = "/ads/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Ad>> update(@PathVariable Long id,
@@ -208,7 +208,7 @@ public class AdController {
                 });
     }
 
-    @DeleteMapping(value = "/edit/ads/{id}",
+    @DeleteMapping(value = "/ads/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Ad>> delete(@PathVariable Long id) {

@@ -42,7 +42,10 @@ public class S3Service implements ReactiveFileService {
     @Override
     public Mono<Void> deleteAll(String prefix){
         return listObjects(prefix)
-                .flatMap(this::deleteObjects)
+                .flatMap(objects -> {
+                    if(objects == null || objects.isEmpty()) return Mono.empty();
+                    return deleteObjects(objects);
+                })
                 .then();
     }
 

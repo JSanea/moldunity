@@ -10,9 +10,9 @@ import java.util.TimeZone;
 @SpringBootApplication(scanBasePackages = "web.app.moldunity")
 @EnableWebFlux
 @EnableScheduling
-public class WebfluxMoldunityApplication {
+public class MoldunityApplication {
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Chisinau"));
-		SpringApplication.run(WebfluxMoldunityApplication.class, args);
+		SpringApplication.run(MoldunityApplication.class, args);
 	}
 }

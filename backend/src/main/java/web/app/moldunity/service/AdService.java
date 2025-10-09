@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
@@ -20,6 +21,7 @@ import web.app.moldunity.entity.postgres.ad.Ad;
 import web.app.moldunity.entity.postgres.ad.AdImage;
 import web.app.moldunity.entity.postgres.ad.FavoriteAd;
 import web.app.moldunity.entity.postgres.ad.Subcategory;
+import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
 import web.app.moldunity.exception.AdServiceException;
 import web.app.moldunity.exception.InvalidAdStructureException;
 import web.app.moldunity.filter.EntityFilter;
@@ -44,6 +46,7 @@ public class AdService {
     private final TransactionalOperator tx;
     private final FilterMap adFilter;
     private UserService userService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public void setUserService(@Lazy UserService userService){
@@ -201,7 +204,8 @@ public class AdService {
                 .switchIfEmpty(Mono.error(new AdServiceException("Ad with id " + adId + " not found")))
                 .flatMap(existingAd ->
                         r2dbcEntityTemplate.delete(existingAd)
-                                .map(u -> existingAd)
+                                .then(Mono.fromRunnable(() -> eventPublisher.publishEvent(new S3AdImagesDeleteAllEvent(existingAd.getId()))))
+                                .thenReturn(existingAd)
                 )
                 .as(tx::transactional)
                 .onErrorResume(e -> {
@@ -333,6 +337,7 @@ public class AdService {
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .flatMap(auth -> getOwnerById(adId).map(owner -> owner.equals(auth.getPrincipal())))
+                .switchIfEmpty(Mono.just(false))
                 .onErrorResume(e -> {
                     log.error("Error to check Ad owner: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Error to check Ad owner"));
