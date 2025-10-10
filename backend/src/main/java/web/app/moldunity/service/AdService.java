@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.dto.ad.*;
@@ -27,6 +25,7 @@ import web.app.moldunity.exception.InvalidAdStructureException;
 import web.app.moldunity.filter.EntityFilter;
 import web.app.moldunity.filter.FilterMap;
 import web.app.moldunity.filter.FilterQuery;
+import web.app.moldunity.service.data.ReactiveDataManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,9 +40,7 @@ import java.util.stream.Collectors;
 public class AdService {
     @Value("${page.limit}")
     private Long limit;
-    private final R2dbcEntityTemplate r2dbcEntityTemplate;
-    private final DatabaseClient databaseClient;
-    private final TransactionalOperator tx;
+    private final ReactiveDataManager dataManager;
     private final FilterMap adFilter;
     private UserService userService;
     private final ApplicationEventPublisher eventPublisher;
@@ -54,12 +51,12 @@ public class AdService {
     }
 
     public <S extends Subcategory> Mono<AdDetailsWithImages> getById(Long id, Class<S> subcategoryType) {
-        return r2dbcEntityTemplate.selectOne(Query.query(Criteria.where("id").is(id)), Ad.class)
+        return dataManager.entityTemplate().selectOne(Query.query(Criteria.where("id").is(id)), Ad.class)
                 .flatMap(ad -> {
-                    Mono<? extends Subcategory> subcategoryMono = r2dbcEntityTemplate
+                    Mono<? extends Subcategory> subcategoryMono = dataManager.entityTemplate()
                             .selectOne(Query.query(Criteria.where("ad_id").is(ad.getId())), subcategoryType);
 
-                    Mono<List<AdImage>> imagesMono = r2dbcEntityTemplate
+                    Mono<List<AdImage>> imagesMono = dataManager.entityTemplate()
                             .select(Query.query(Criteria.where("ad_id").is(ad.getId())), AdImage.class)
                             .collectList();
 
@@ -83,7 +80,7 @@ public class AdService {
     }
 
     public <S extends Subcategory> Mono<S> findSubcategoryByAdId(Long adId, Class<S> subcategory){
-        return r2dbcEntityTemplate.selectOne(
+        return dataManager.entityTemplate().selectOne(
                 Query.query(Criteria.where("ad_id").is(adId)),
                 subcategory
         )
@@ -102,11 +99,11 @@ public class AdService {
         String sql = baseSelectAds() + fq.sql() + "LIMIT :limit OFFSET :offset ";
 
         if(filter == null || filter.isEmpty()){
-            execute = databaseClient.sql(sql).bind("subcategory", subcategory);
-            countExec = databaseClient.sql(fq.countSql()).bind("subcategory", subcategory);
+            execute = dataManager.databaseClient().sql(sql).bind("subcategory", subcategory);
+            countExec = dataManager.databaseClient().sql(fq.countSql()).bind("subcategory", subcategory);
         }else{
-            execute = databaseClient.sql(sql).bindValues(fq.params());
-            countExec = databaseClient.sql(fq.countSql()).bindValues(fq.params());
+            execute = dataManager.databaseClient().sql(sql).bindValues(fq.params());
+            countExec = dataManager.databaseClient().sql(fq.countSql()).bindValues(fq.params());
         }
 
         log.debug("Params: {}", fq.params());
@@ -125,7 +122,7 @@ public class AdService {
 
                     List<Long> adIds = ads.stream().map(Ad::getId).toList();
 
-                    return databaseClient.sql(String.format(
+                    return dataManager.databaseClient().sql(String.format(
                             """
                             %1$s
                             WHERE ad_id IN (:ids)
@@ -160,7 +157,7 @@ public class AdService {
 
     public <S extends Subcategory> Mono<AdDetails> save(AdDetails adDetails, Class<S> subcategoryType) {
         adDetails.ad().setDateTimeFields();
-        return r2dbcEntityTemplate.insert(Ad.class).using(adDetails.ad())
+        return dataManager.entityTemplate().insert(Ad.class).using(adDetails.ad())
                 .flatMap(savedAd -> {
                     S subcategory = subcategoryType.cast(adDetails.subcategory());
 
@@ -168,10 +165,10 @@ public class AdService {
 
                     subcategory.setAdId(savedAd.getId());
 
-                    return r2dbcEntityTemplate.insert(subcategoryType).using(subcategory)
+                    return dataManager.entityTemplate().insert(subcategoryType).using(subcategory)
                             .flatMap(savedSubcategory -> Mono.just(new AdDetails(savedAd, savedSubcategory)));
                 })
-                .as(tx::transactional)
+                .as(dataManager.txOperator()::transactional)
                 .onErrorResume(e -> {
                     log.error("Error inserting Ad: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Failed to insert Ad"));
@@ -179,18 +176,18 @@ public class AdService {
     }
 
     public <S extends Subcategory> Mono<Ad> update(AdDetails adDetails, Class<S> subcategory) {
-        return r2dbcEntityTemplate.select(Ad.class)
+        return dataManager.entityTemplate().select(Ad.class)
                 .matching(Query.query(Criteria.where("id").is(adDetails.ad().getId())))
                 .one()
                 .switchIfEmpty(Mono.error(new AdServiceException("Ad with id " + adDetails.ad().getId() + " not found")))
                 .flatMap(existingAd ->
-                        r2dbcEntityTemplate.update(existingAd.update(adDetails.ad()))
+                        dataManager.entityTemplate().update(existingAd.update(adDetails.ad()))
                                 .flatMap(updatedAd -> {
                                     S s = subcategory.cast(adDetails.subcategory());
-                                    return r2dbcEntityTemplate.update(s).map(u -> updatedAd);
+                                    return dataManager.entityTemplate().update(s).map(u -> updatedAd);
                                 })
                 )
-                .as(tx::transactional)
+                .as(dataManager.txOperator()::transactional)
                 .onErrorResume(e -> {
                     log.error("Error updating Ad: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Failed to update Ad"));
@@ -198,16 +195,16 @@ public class AdService {
     }
 
     public Mono<Ad> delete(Long adId) {
-        return r2dbcEntityTemplate.select(Ad.class)
+        return dataManager.entityTemplate().select(Ad.class)
                 .matching(Query.query(Criteria.where("id").is(adId)))
                 .one()
                 .switchIfEmpty(Mono.error(new AdServiceException("Ad with id " + adId + " not found")))
                 .flatMap(existingAd ->
-                        r2dbcEntityTemplate.delete(existingAd)
+                        dataManager.entityTemplate().delete(existingAd)
                                 .then(Mono.fromRunnable(() -> eventPublisher.publishEvent(new S3AdImagesDeleteAllEvent(existingAd.getId()))))
                                 .thenReturn(existingAd)
                 )
-                .as(tx::transactional)
+                .as(dataManager.txOperator()::transactional)
                 .onErrorResume(e -> {
                     log.error("Error deleting Ad: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Failed to delete Ad"));
@@ -229,7 +226,7 @@ public class AdService {
     }
 
     public Mono<List<Long>> findFavoriteIdsByUserId(Long userId){
-        return r2dbcEntityTemplate.select(
+        return dataManager.entityTemplate().select(
                 Query.query(Criteria.where("user_id").is(userId)),
                 FavoriteAd.class
         )
@@ -238,18 +235,18 @@ public class AdService {
     }
 
     public Mono<Ad> republish(Long adId){
-        return r2dbcEntityTemplate.select(Ad.class)
+        return dataManager.entityTemplate().select(Ad.class)
                 .matching(Query.query(Criteria.where("id").is(adId)))
                 .one()
                 .switchIfEmpty(Mono.error(new AdServiceException("Ad with id " + adId + " not found")))
                 .flatMap(existingAd -> {
                     if(!existingAd.getRepublishedAt().toLocalDate().equals(LocalDate.now())){
                         existingAd.setRepublishedAt(LocalDateTime.now());
-                        return r2dbcEntityTemplate.update(existingAd).map(ad -> existingAd);
+                        return dataManager.entityTemplate().update(existingAd).map(ad -> existingAd);
                     }
                     return Mono.empty();
                 })
-                .as(tx::transactional)
+                .as(dataManager.txOperator()::transactional)
                 .onErrorResume(e -> {
                     log.error("Error updating Ad: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Failed to republish Ad"));
@@ -262,7 +259,7 @@ public class AdService {
                 WHERE ads.username = :username
                 """;
 
-        return findAdsWithImagesByCondition(databaseClient.sql(sql)
+        return findAdsWithImagesByCondition(dataManager.databaseClient().sql(sql)
                 .bind("username", username));
     }
 
@@ -271,7 +268,7 @@ public class AdService {
     }
 
     public Mono<Long> getCountAdsByUsername(String username) {
-        return databaseClient.sql("SELECT count(*) AS cnt FROM ads WHERE username = :username")
+        return dataManager.databaseClient().sql("SELECT count(*) AS cnt FROM ads WHERE username = :username")
                 .bind("username", username)
                 .map((row, metadata) -> row.get("cnt", Long.class))
                 .one()
@@ -282,7 +279,7 @@ public class AdService {
     }
 
     public Mono<Long> getCountAdsByUsernameAndSubcategory(String username, String subcategory) {
-        return databaseClient.sql("SELECT count(*) AS cnt FROM ads WHERE username = :username AND subcategory_name = :subcategory")
+        return dataManager.databaseClient().sql("SELECT count(*) AS cnt FROM ads WHERE username = :username AND subcategory_name = :subcategory")
                 .bind("username", username)
                 .bind("subcategory", subcategory)
                 .map((row, metadata) -> row.get("cnt", Long.class))
@@ -294,7 +291,7 @@ public class AdService {
     }
 
     public Mono<String> getOwnerById(Long id){
-        return databaseClient.sql("SELECT ads.username FROM ads WHERE ads.id = :id")
+        return dataManager.databaseClient().sql("SELECT ads.username FROM ads WHERE ads.id = :id")
                 .bind("id", id)
                 .map(((row, rowMetadata) -> row.get("username", String.class)))
                 .one()
@@ -306,7 +303,7 @@ public class AdService {
 
     public Mono<Long> countBySubcategory(String subcategory) {
         String sql = "SELECT count(*) FROM ads WHERE subcategory_name = :subcategory";
-        return databaseClient.sql(sql)
+        return dataManager.databaseClient().sql(sql)
                 .bind("subcategory", subcategory)
                 .map(row -> row.get(0, Long.class))
                 .one();
@@ -317,16 +314,16 @@ public class AdService {
                 "INNER JOIN ad_images ON ads.id = ad_images.ad_id " +
                 "WHERE ads.id = :id";
 
-        return databaseClient.sql(sql)
+        return dataManager.databaseClient().sql(sql)
                 .bind("id", adId)
                 .map(row -> row.get(0, Long.class))
                 .one();
     }
 
     public Mono<AdImage> saveImageUrl(AdImage image) {
-        return r2dbcEntityTemplate
+        return dataManager.entityTemplate()
                 .insert(image)
-                .as(tx::transactional)
+                .as(dataManager.txOperator()::transactional)
                 .onErrorResume(e -> {
                     log.error("Error saving image url: {}", e.getMessage(), e);
                     return Mono.error(new AdServiceException("Failed to save image url"));
@@ -350,7 +347,7 @@ public class AdService {
                     if (user == null || user.getId() == null) {
                         return Mono.just(false);
                     }
-                    return r2dbcEntityTemplate.exists(Query.query(Criteria.where("ad_id").is(adId)
+                    return dataManager.entityTemplate().exists(Query.query(Criteria.where("ad_id").is(adId)
                             .and(Criteria.where("user_id").is(user.getId()))), FavoriteAd.class);
                 })
                 .onErrorResume(e -> {
