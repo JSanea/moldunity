@@ -3,7 +3,6 @@ package web.app.moldunity.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -11,11 +10,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.dto.Profile;
-import web.app.moldunity.dto.UserProfile;
-import web.app.moldunity.entity.postgres.user.User;
 import web.app.moldunity.enums.ChangePasswordStatus;
 import web.app.moldunity.exception.UserServiceException;
+import web.app.moldunity.model.dto.Profile;
+import web.app.moldunity.model.dto.UserProfile;
+import web.app.moldunity.model.entity.postgres.user.User;
 import web.app.moldunity.service.data.ReactiveDataManager;
 
 import java.time.LocalDateTime;
@@ -27,10 +26,6 @@ public class UserService {
     private final ReactiveDataManager dataManager;
     private final PasswordEncoder passwordEncoder;
     private AdService adService;
-
-    public void setAdService(@Lazy AdService adService){
-        this.adService = adService;
-    }
 
     public Mono<User> findUserByName(String username) {
         return dataManager.databaseClient().sql("SELECT * FROM users WHERE username = :username")

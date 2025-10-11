@@ -1,10 +1,10 @@
 package web.app.moldunity.enums;
 
-import web.app.moldunity.entity.postgres.ad.Subcategory;
-import web.app.moldunity.entity.postgres.real_estate.Apartment;
-import web.app.moldunity.entity.postgres.real_estate.Home;
-import web.app.moldunity.entity.postgres.transport.BusMinibus;
-import web.app.moldunity.entity.postgres.transport.Car;
+import web.app.moldunity.model.entity.postgres.ad.Subcategory;
+import web.app.moldunity.model.entity.postgres.real_estate.Apartment;
+import web.app.moldunity.model.entity.postgres.real_estate.Home;
+import web.app.moldunity.model.entity.postgres.transport.BusMinibus;
+import web.app.moldunity.model.entity.postgres.transport.Car;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.dto.Profile;
+import web.app.moldunity.model.dto.Profile;
 import web.app.moldunity.service.UserService;
 
 @RestController

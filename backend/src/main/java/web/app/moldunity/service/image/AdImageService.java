@@ -3,14 +3,12 @@ package web.app.moldunity.service.image;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.entity.postgres.ad.AdImage;
+import web.app.moldunity.model.entity.postgres.ad.AdImage;
 import web.app.moldunity.event.AdImagesDeleteAllEvent;
 import web.app.moldunity.service.data.ReactiveDataManager;
 

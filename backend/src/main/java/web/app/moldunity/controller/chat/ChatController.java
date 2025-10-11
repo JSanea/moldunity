@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.entity.mongo.chat.Chat;
-import web.app.moldunity.entity.mongo.chat.ChatMessage;
+import web.app.moldunity.model.entity.mongo.chat.Chat;
+import web.app.moldunity.model.entity.mongo.chat.ChatMessage;
 import web.app.moldunity.service.chat.ChatService;
 
 import java.util.List;

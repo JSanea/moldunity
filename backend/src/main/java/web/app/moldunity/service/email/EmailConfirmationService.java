@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.entity.postgres.user.User;
+import web.app.moldunity.model.entity.postgres.user.User;
 import web.app.moldunity.util.Expiry;
 import web.app.moldunity.util.ExpiryMap;
 

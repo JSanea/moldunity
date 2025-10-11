@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.entity.mongo.chat.ChatMessage;
+import web.app.moldunity.model.entity.mongo.chat.ChatMessage;
 
 import java.util.List;
 
