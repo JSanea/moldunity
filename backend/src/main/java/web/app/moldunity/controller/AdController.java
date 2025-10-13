@@ -17,12 +17,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import web.app.moldunity.enums.AdSubtype;
 import web.app.moldunity.model.dto.ad.AdDetails;
 import web.app.moldunity.model.dto.ad.AdDetailsWithImages;
 import web.app.moldunity.model.dto.ad.AdPage;
 import web.app.moldunity.model.entity.postgres.ad.Ad;
 import web.app.moldunity.model.entity.postgres.ad.Subcategory;
-import web.app.moldunity.enums.AdSubtype;
 import web.app.moldunity.service.AdService;
 import web.app.moldunity.service.UserService;
 
@@ -104,7 +104,7 @@ public class AdController {
     }
 
     @GetMapping(value = "/count/{subcategory}")
-    public Mono<ResponseEntity<Long>> getCount(@PathVariable String subcategory){
+    public Mono<ResponseEntity<Long>> getSubcategoryCountByAuthName(@PathVariable String subcategory){
         return ReactiveSecurityContextHolder.getContext()
                 .map(ctx -> (String)ctx.getAuthentication().getPrincipal())
                 .flatMap(username -> {
@@ -157,6 +157,7 @@ public class AdController {
                         .flatMap(user -> {
                             adDetails.ad().setUsername(username);
                             adDetails.ad().setUserId(user.getId());
+                            adDetails.ad().setViews(0);
 
                             if(adDetails.ad().getCountry() == null) {
                                 adDetails.ad().setCountry(user.getCountry());
@@ -178,21 +179,11 @@ public class AdController {
                 });
     }
 
-    @PostMapping(value = "/republish/ads/{id}")
-    public Mono<ResponseEntity<Ad>> republish(@PathVariable Long id){
-        return adService.republish(id)
-                .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()))
-                .onErrorResume(e -> {
-                    log.error("Error to republish Ad: {}", e.getMessage(), e);
-                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-                });
-    }
 
     @PutMapping(value = "/ads/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<Ad>> update(@PathVariable Long id,
+    public Mono<ResponseEntity<AdDetails>> update(@PathVariable Long id,
                                            @Valid @RequestBody AdDetails adDetails) {
         if (adDetails.subcategory() == null || !id.equals(adDetails.ad().getId())) {
             return Mono.just(ResponseEntity.badRequest().build());
@@ -208,15 +199,24 @@ public class AdController {
                 });
     }
 
-    @DeleteMapping(value = "/ads/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/ads/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Ad>> delete(@PathVariable Long id) {
         return adService.delete(id)
                 .map(ResponseEntity::ok)
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build()))
                 .onErrorResume(e -> {
                     log.error("Error deleting Ad: {}", e.getMessage(), e);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+                });
+    }
+
+    @PostMapping(value = "/republish/ads/{id}")
+    public Mono<ResponseEntity<Ad>> republish(@PathVariable Long id){
+        return adService.republish(id)
+                .map(ResponseEntity::ok)
+                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()))
+                .onErrorResume(e -> {
+                    log.error("Error to republish Ad: {}", e.getMessage(), e);
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 });
     }

@@ -67,7 +67,6 @@ public class AdService {
                                 Subcategory subcategory = tuple.getT1();
                                 List<AdImage> images = tuple.getT2();
                                 Boolean favorite = tuple.getT3();
-
                                 AdWithImages adWithImages = new AdWithImages(ad, images, favorite);
                                 return new AdDetailsWithImages(adWithImages, subcategoryType.cast(subcategory));
                             });
@@ -175,7 +174,7 @@ public class AdService {
                 });
     }
 
-    public <S extends Subcategory> Mono<Ad> update(AdDetails adDetails, Class<S> subcategory) {
+    public <S extends Subcategory> Mono<AdDetails> update(AdDetails adDetails, Class<S> subcategory) {
         return dataManager.entityTemplate().select(Ad.class)
                 .matching(Query.query(Criteria.where("id").is(adDetails.ad().getId())))
                 .one()
@@ -184,7 +183,9 @@ public class AdService {
                         dataManager.entityTemplate().update(existingAd.update(adDetails.ad()))
                                 .flatMap(updatedAd -> {
                                     S s = subcategory.cast(adDetails.subcategory());
-                                    return dataManager.entityTemplate().update(s).map(u -> updatedAd);
+                                    return dataManager.entityTemplate()
+                                            .update(s)
+                                            .map(u -> new AdDetails(updatedAd,subcategory.cast(u)));
                                 })
                 )
                 .as(dataManager.txOperator()::transactional)
@@ -212,7 +213,7 @@ public class AdService {
     }
 
     public Mono<List<Long>> findFavoriteIds(){
-        return userService.getUser()
+        return userService.getUserByAuthName()
                 .flatMap(user -> {
                     if (user == null || user.getId() == null) {
                         return Mono.just(List.of(0L));
@@ -342,14 +343,11 @@ public class AdService {
     }
 
     public Mono<Boolean> isFavorite(Long adId){
-        return userService.getUser()
-                .flatMap(user -> {
-                    if (user == null || user.getId() == null) {
-                        return Mono.just(false);
-                    }
-                    return dataManager.entityTemplate().exists(Query.query(Criteria.where("ad_id").is(adId)
-                            .and(Criteria.where("user_id").is(user.getId()))), FavoriteAd.class);
-                })
+        return userService.getUserByAuthName()
+                .filter(u -> u == null || u.getId() != null)
+                .flatMap(user -> dataManager.entityTemplate().exists(Query.query(Criteria.where("ad_id").is(adId)
+                        .and(Criteria.where("user_id").is(user.getId()))), FavoriteAd.class))
+                .defaultIfEmpty(false)
                 .onErrorResume(e -> {
                     log.error("Error checking favorite status for adId {}: {}", adId, e.getMessage(), e);
                     return Mono.error(new RuntimeException("Error checking favorite status for adId"));

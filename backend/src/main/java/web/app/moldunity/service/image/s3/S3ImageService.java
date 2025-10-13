@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.model.entity.postgres.ad.AdImage;
 import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
+import web.app.moldunity.model.entity.postgres.ad.AdImage;
 import web.app.moldunity.service.AdService;
 import web.app.moldunity.service.image.ReactiveFileService;
 

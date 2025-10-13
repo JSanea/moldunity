@@ -10,21 +10,22 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.*;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.cookie.CookieHandler;
+import web.app.moldunity.event.UpdateRefreshTokenEvent;
 import web.app.moldunity.security.AuthRequest;
 import web.app.moldunity.security.AuthResponse;
 import web.app.moldunity.security.JwtTokenProvider;
+import web.app.moldunity.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,8 @@ public class AuthController {
     private final ReactiveUserDetailsService reactiveUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserService userService;
 
     @PostMapping(value = "/login")
     @Operation(summary = "Authenticate user and return JWT token")
@@ -63,7 +66,7 @@ public class AuthController {
 
                     return ResponseEntity.ok()
                             .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                            //.header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                            //.header(HttpHeaders.SET_COOKIE, accessCookie.toString()
                             .body(new AuthResponse(accessToken));
 
                 })
@@ -76,13 +79,18 @@ public class AuthController {
 
     @GetMapping(value = "/logout")
     public Mono<ResponseEntity<Void>> logout(ServerHttpResponse response){
-        //ResponseCookie accessCookie   = cookieHandler.createCookie("access_token", "", 0L);
-        ResponseCookie responseCookie = cookieHandler.createCookie("refresh_token", "", 0L);
-
-        //response.addCookie(accessCookie);
-        response.addCookie(responseCookie);
-
-        return Mono.just(ResponseEntity.ok().build());
+        return userService.getUserByAuthName()
+                .filter(u -> u.getId() != null)
+                .flatMap(user -> {
+                    ResponseCookie responseCookie = cookieHandler.createCookie("refresh_token", "", 0L);
+                    response.addCookie(responseCookie);
+                    return Mono.fromRunnable(() -> eventPublisher.publishEvent(new UpdateRefreshTokenEvent("", user.getId()))).then();
+                })
+                .map(ResponseEntity::ok)
+                .onErrorResume(e -> {
+                    log.error("Failed to logout: {}", e.getMessage(), e);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+                });
     }
 
     @Tag(name = "Authentication", description = "Endpoints for token management")
@@ -113,6 +121,7 @@ public class AuthController {
 
         return reactiveUserDetailsService.findByUsername(username)
                 .filter(userDetails -> jwtTokenProvider.isTokenValid(refreshToken, userDetails))
+                // TODO: compare refresh token from cookie with from db
                 .map(jwtTokenProvider::generateToken)
                 .map(accessToken -> {
                     //ResponseCookie accessCookie = cookieHandler.createCookie("access_token", accessToken, accessTokenMaxAge);
@@ -141,4 +150,20 @@ public class AuthController {
                 .defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false)));
     }
 
+    @PutMapping(value = "/refresh-tokens")
+    public Mono<ResponseEntity<Void>> update(ServerWebExchange exchange){
+        return userService.getUserByAuthName()
+                .filter(u -> u.getId() != null)
+                .flatMap(user -> Mono.justOrEmpty(exchange.getRequest().getCookies().getFirst("refresh_token"))
+                        .map(HttpCookie::getValue)
+                        .filter(token -> !token.isEmpty())
+                        .flatMap(token -> Mono.fromRunnable(() -> eventPublisher
+                                .publishEvent(new UpdateRefreshTokenEvent(token, user.getId()))).then())
+                )
+                .map(ResponseEntity::ok)
+                .onErrorResume(e -> {
+                    log.error("Failed to update refresh token: {}", e.getMessage(), e);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+                });
+    }
 }

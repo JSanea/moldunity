@@ -1,15 +1,12 @@
 package web.example.moldunity;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import web.app.moldunity.MoldunityApplication;
 
-@SpringBootTest
+@SpringBootTest(classes = MoldunityApplication.class)
 class MoldunityApplicationTests {
-	@Autowired
-	private WebTestClient webTestClient;
-	@Test
+    @Test
 	void contextLoads() {
 	}
 

@@ -50,7 +50,7 @@ public class UserService {
                 });
     }
 
-    public Mono<User> getUser(){
+    public Mono<User> getUserByAuthName(){
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .flatMap(auth -> findUserByName((String) auth.getPrincipal()))

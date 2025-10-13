@@ -23,6 +23,7 @@ public class UserController {
     @GetMapping(value = "/profile/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Profile>> getProfile(@PathVariable String username){
         log.info("Received request to fetch profile for username: {}", username);
+
         return userService.getProfileByName(username)
                 .doOnSuccess(profile -> {
                     if (profile != null) {
