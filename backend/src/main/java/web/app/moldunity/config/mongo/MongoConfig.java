@@ -16,7 +16,7 @@ public class MongoConfig {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString("mongodb://localhost:27017"))
                 .applyToConnectionPoolSettings(builder -> builder
-                                .maxSize(64)
+                                .maxSize(100)
                                 .minSize(4))
                 .build();
 

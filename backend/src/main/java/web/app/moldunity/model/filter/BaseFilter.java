@@ -14,7 +14,7 @@ public abstract class BaseFilter {
                                            Consumer<FilterContext> extraFilterLogic) {
         if (filters == null || filters.isEmpty()) {
             return new FilterQuery(
-                    "WHERE ads.subcategory_name = :subcategory AND republished_at >= NOW() - INTERVAL '30 days' ",
+                    "WHERE ads.subcategory_name = :subcategory AND republished_at >= NOW() - INTERVAL '30 days' ORDER BY ads.republished_at DESC ",
                     "SELECT count(*) FROM ads WHERE subcategory_name = :subcategory AND republished_at >= NOW() - INTERVAL '30 days' ",
                     Collections.emptyMap());
         }

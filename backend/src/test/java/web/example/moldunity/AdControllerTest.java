@@ -18,7 +18,8 @@ import web.app.moldunity.security.AuthRequest;
 public class AdControllerTest {
     @Autowired
     private WebTestClient webTestClient;
-    private static String token;
+    private static String tokenQiwi;
+    private static String tokenAlx;
     private static AdDetails newAd;
 
     @Test
@@ -30,11 +31,25 @@ public class AdControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.token").value(String.class, t -> token = t);
+                .jsonPath("$.token").exists()
+                .jsonPath("$.token").value(String.class, t -> tokenQiwi = t);
     }
 
     @Test
     @Order(2)
+    void login(){
+        webTestClient.post().uri("/api/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new AuthRequest("alx", "1234"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.token").exists()
+                .jsonPath("$.token").value(String.class, t -> tokenAlx = t);
+    }
+
+    @Test
+    @Order(3)
     void createTest(){
         Ad ad = Ad.builder()
                 .username("Qiwi")
@@ -57,7 +72,7 @@ public class AdControllerTest {
         AdDetails adDetails = new AdDetails(ad, car);
 
         webTestClient.post().uri("/api/ads")
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + tokenQiwi)
                 .bodyValue(adDetails)
                 .exchange()
                 .expectStatus().isOk()
@@ -67,7 +82,7 @@ public class AdControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void getNewAdByIdTest(){
         Long id = newAd.ad().getId();
         Assertions.assertNotNull(id, "Id should be initialized");
@@ -79,7 +94,7 @@ public class AdControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void getBySubcategoryTest(){
         webTestClient.post().uri("/api/ads/car?page=1")
                 .exchange()
@@ -89,9 +104,10 @@ public class AdControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void getSubcategoryByAdIdTest(){
         Long id = newAd.ad().getId();
+        Assertions.assertNotNull(id, "Id should be initialized");
         webTestClient.get().uri("/api/ads/" + id + "/subcategory?type=Car")
                 .exchange()
                 .expectStatus().isOk()
@@ -100,25 +116,27 @@ public class AdControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void getSubcategoryCountByAuthNameTest(){
         webTestClient.get().uri("/api/count/Car")
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + tokenQiwi)
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     void updateTest(){
         Long id = newAd.ad().getId();
+        Assertions.assertNotNull(id, "Id should be initialized");
+
         newAd.ad().setPrice(10500);
         Car car = (Car)newAd.subcategory();
         car.setMileage(173000);
         AdDetails updatedAd = new AdDetails(newAd.ad(), car);
 
-        webTestClient.put().uri("/api/ads/" + id)
-                .header("Authorization", "Bearer " + token)
+        webTestClient.put().uri("/api/edit/ads/" + id)
+                .header("Authorization", "Bearer " + tokenQiwi)
                 .bodyValue(updatedAd)
                 .exchange()
                 .expectStatus().isOk()
@@ -129,21 +147,37 @@ public class AdControllerTest {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     void republishTest(){
         Long id = newAd.ad().getId();
-        webTestClient.post().uri("/api/republish/ads/" + id)
-                .header("Authorization", "Bearer " + token)
+        Assertions.assertNotNull(id, "Id should be initialized");
+
+        webTestClient.put().uri("/api/republish/ads/" + id)
+                .header("Authorization", "Bearer " + tokenQiwi)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     @Test
-    @Order(9)
+    @Order(10)
+    void deleteByAnotherUserTest(){
+        Long id = newAd.ad().getId();
+        Assertions.assertNotNull(id, "Id should be initialized");
+
+        webTestClient.delete().uri("/api/edit/ads/" + id)
+                .header("Authorization", "Bearer " + tokenAlx)
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
+    @Order(11)
     void deleteTest(){
         Long id = newAd.ad().getId();
-        webTestClient.delete().uri("/api/ads/" + id)
-                .header("Authorization", "Bearer " + token)
+        Assertions.assertNotNull(id, "Id should be initialized");
+
+        webTestClient.delete().uri("/api/edit/ads/" + id)
+                .header("Authorization", "Bearer " + tokenQiwi)
                 .exchange()
                 .expectStatus().isOk();
     }

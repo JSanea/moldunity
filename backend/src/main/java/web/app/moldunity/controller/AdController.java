@@ -83,9 +83,12 @@ public class AdController {
     public Mono<ResponseEntity<AdPage>> getBySubcategory(@PathVariable String subcategory,
                                                          @RequestParam Long page,
                                                          @RequestBody(required = false) Map<String, List<String>> filter){
+        if(page < 1 || subcategory.isBlank()) return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
         return Mono.justOrEmpty(AdSubtype.fromSubcategoryName(subcategory))
                 .flatMap(sub -> adService.findBySubcategoryAndFilter(sub.getSubcategoryName(), page, filter))
                 .map(ResponseEntity::ok)
+                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()))
                 .onErrorResume(e -> {
                     log.error("Error fetching Ad: ", e);
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
@@ -180,7 +183,7 @@ public class AdController {
     }
 
 
-    @PutMapping(value = "/ads/{id}",
+    @PutMapping(value = "/edit/ads/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<AdDetails>> update(@PathVariable Long id,
@@ -199,7 +202,7 @@ public class AdController {
                 });
     }
 
-    @DeleteMapping(value = "/ads/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/edit/ads/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Ad>> delete(@PathVariable Long id) {
         return adService.delete(id)
                 .map(ResponseEntity::ok)
@@ -210,7 +213,7 @@ public class AdController {
                 });
     }
 
-    @PostMapping(value = "/republish/ads/{id}")
+    @PutMapping(value = "/republish/ads/{id}")
     public Mono<ResponseEntity<Ad>> republish(@PathVariable Long id){
         return adService.republish(id)
                 .map(ResponseEntity::ok)

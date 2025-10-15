@@ -14,14 +14,14 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
+import web.app.moldunity.exception.AdServiceException;
+import web.app.moldunity.exception.InvalidAdStructureException;
 import web.app.moldunity.model.dto.ad.*;
 import web.app.moldunity.model.entity.postgres.ad.Ad;
 import web.app.moldunity.model.entity.postgres.ad.AdImage;
 import web.app.moldunity.model.entity.postgres.ad.FavoriteAd;
 import web.app.moldunity.model.entity.postgres.ad.Subcategory;
-import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
-import web.app.moldunity.exception.AdServiceException;
-import web.app.moldunity.exception.InvalidAdStructureException;
 import web.app.moldunity.model.filter.EntityFilter;
 import web.app.moldunity.model.filter.FilterMap;
 import web.app.moldunity.model.filter.FilterQuery;
@@ -91,18 +91,25 @@ public class AdService {
     }
 
     public Mono<AdPage> findBySubcategoryAndFilter(String subcategory, Long page, Map<String, List<String>> filter){
-        EntityFilter filterHandler = adFilter.getFilter(subcategory);
-        FilterQuery fq = filterHandler.filter(filter);;
         DatabaseClient.GenericExecuteSpec execute;
         DatabaseClient.GenericExecuteSpec countExec;
-        String sql = baseSelectAds() + fq.sql() + "LIMIT :limit OFFSET :offset ";
+        EntityFilter filterHandler = adFilter.getFilter(subcategory);
+        FilterQuery fq;
+        String sql;
 
-        if(filter == null || filter.isEmpty()){
-            execute = dataManager.databaseClient().sql(sql).bind("subcategory", subcategory);
-            countExec = dataManager.databaseClient().sql(fq.countSql()).bind("subcategory", subcategory);
+        if(filterHandler == null){
+            return Mono.empty();
         }else{
-            execute = dataManager.databaseClient().sql(sql).bindValues(fq.params());
-            countExec = dataManager.databaseClient().sql(fq.countSql()).bindValues(fq.params());
+            fq = filterHandler.filter(filter);;
+            sql = baseSelectAds() + fq.sql() + "LIMIT :limit OFFSET :offset ";
+
+            if(filter == null || filter.isEmpty()){
+                execute = dataManager.databaseClient().sql(sql).bind("subcategory", subcategory);
+                countExec = dataManager.databaseClient().sql(fq.countSql()).bind("subcategory", subcategory);
+            }else{
+                execute = dataManager.databaseClient().sql(sql).bindValues(fq.params());
+                countExec = dataManager.databaseClient().sql(fq.countSql()).bindValues(fq.params());
+            }
         }
 
         log.debug("Params: {}", fq.params());

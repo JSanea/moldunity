@@ -57,7 +57,7 @@ public class PostgresConfig extends AbstractR2dbcConfiguration {
         ConnectionPoolConfiguration connectionPoolConfiguration = ConnectionPoolConfiguration.builder()
                 .connectionFactory(connectionFactory)
                 .initialSize(Runtime.getRuntime().availableProcessors())
-                .maxSize(32)
+                .maxSize(100)
                 .minIdle(Runtime.getRuntime().availableProcessors())
                 .maxIdleTime(Duration.ofSeconds(30))
                 .maxLifeTime(Duration.ofSeconds(60))
