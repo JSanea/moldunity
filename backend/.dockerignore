@@ -1,0 +1,27 @@
+# Exclude Git-related files
+.git
+.gitignore
+
+# Exclude build output directories
+target/
+build/
+
+# Exclude IDE-specific files and directories
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Exclude temporary or log files
+tmp/
+logs/
+*.log
+
+# Exclude Maven/Gradle wrapper files if not needed in the final image
+# (Often, these are not needed in the final image, but may be used during multi-stage builds)
+
+
+# Exclude Docker-related files if they are not part of the build context
+#Dockerfile
+#docker-compose.yml
