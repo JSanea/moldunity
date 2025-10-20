@@ -73,33 +73,32 @@ public class UserService {
     }
 
     public Mono<Profile> getProfileByName(String name) {
-            log.info("Fetching profile for username: {}", name);
-            return dataManager.entityTemplate().selectOne(
-                            Query.query(Criteria.where("username").is(name)),
-                            User.class
-                    )
-                    .doOnSubscribe(subscription -> log.debug("Subscription started for username: {}", name))
-                    .doOnSuccess(user -> {
-                        if (user != null) {
-                            log.info("Successfully fetched user: {}", user.getUsername());
-                        } else {
-                            log.warn("No user found for username: {}", name);
-                        }
-                    })
-                    .map(u -> new UserProfile(
-                            u.getUsername(),
-                            u.getCountry(),
-                            u.getLocation(),
-                            u.getCreatedAt()))
-                    .flatMap(user -> adService.getByUsername(name)
-                            .doOnNext(ads -> log.info("Fetched ads for username: {}", name))
-                            .map(ads -> new Profile(user, ads))
-                    )
-                    .doOnError(e -> log.error("Error fetching profile for username {}: {}", name, e.getMessage(), e))
-                    .onErrorResume(e -> {
-                        log.error("Error to fetch profile by name: {}", e.getMessage());
-                        return Mono.error(new UserServiceException("Error to fetch profile by name"));
-                    });
+        log.info("Fetching profile for username: {}", name);
+        return dataManager.entityTemplate().selectOne(
+                        Query.query(Criteria.where("username").is(name)),
+                        User.class
+                )
+                .doOnSuccess(user -> {
+                    if (user == null) {
+                        log.warn("No user found for username: {}", name);
+                    }
+                })
+                .filter(user -> "USER".equals(user.getRole()))
+                .switchIfEmpty(Mono.error(new UserServiceException("Profile not found or insufficient privileges for user: " + name)))
+                .map(u -> new UserProfile(
+                        u.getUsername(),
+                        u.getCountry(),
+                        u.getLocation(),
+                        u.getCreatedAt()))
+                .flatMap(user -> adService.getByUsername(name)
+                        .doOnNext(ads -> log.info("Fetched ads for username: {}", name))
+                        .map(ads -> new Profile(user, ads))
+                )
+                .onErrorResume(e -> {
+                    log.error("Error to fetch profile by name: {}. Cause: {}", name, e.getMessage());
+                    // Return a specific exception instance
+                    return Mono.error(new UserServiceException("Error to fetch profile by name: " + e.getMessage()));
+                });
     }
 
     public Mono<ChangePasswordStatus> changePassword(String username, String currentPass, String newPass){

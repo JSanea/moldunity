@@ -29,6 +29,6 @@
     <root level="INFO">
         <appender-ref ref="FILE"/>
         <!-- Optionally disable console in prod -->
-        <!-- <appender-ref ref="STDOUT"/> -->
+         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
