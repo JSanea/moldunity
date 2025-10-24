@@ -15,6 +15,7 @@ import web.app.moldunity.exception.UserServiceException;
 import web.app.moldunity.model.dto.Profile;
 import web.app.moldunity.model.dto.UserProfile;
 import web.app.moldunity.model.entity.postgres.user.User;
+import web.app.moldunity.service.ad.AdService;
 import web.app.moldunity.service.data.ReactiveDataManager;
 
 import java.time.LocalDateTime;

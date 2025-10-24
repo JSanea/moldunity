@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.event.AdImagesDeleteAllEvent;
 import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
-import web.app.moldunity.service.AdService;
+import web.app.moldunity.service.ad.AdService;
 import web.app.moldunity.service.image.ImageConvertService;
 import web.app.moldunity.service.image.s3.S3ImageService;
 import web.app.moldunity.util.FilePartUtil;

@@ -1,4 +1,4 @@
-package web.app.moldunity.controller;
+package web.app.moldunity.controller.ad;
 
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ import web.app.moldunity.model.dto.ad.AdDetailsWithImages;
 import web.app.moldunity.model.dto.ad.AdPage;
 import web.app.moldunity.model.entity.postgres.ad.Ad;
 import web.app.moldunity.model.entity.postgres.ad.Subcategory;
-import web.app.moldunity.service.AdService;
+import web.app.moldunity.service.ad.AdService;
 import web.app.moldunity.service.UserService;
 
 import java.util.List;

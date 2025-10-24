@@ -10,7 +10,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-import web.app.moldunity.service.AdService;
+import web.app.moldunity.service.ad.AdService;
 
 
 @Component

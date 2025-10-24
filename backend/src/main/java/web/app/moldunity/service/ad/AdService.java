@@ -1,4 +1,4 @@
-package web.app.moldunity.service;
+package web.app.moldunity.service.ad;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import web.app.moldunity.event.S3AdImagesDeleteAllEvent;
 import web.app.moldunity.exception.AdServiceException;
@@ -25,6 +24,7 @@ import web.app.moldunity.model.entity.postgres.ad.Subcategory;
 import web.app.moldunity.model.filter.EntityFilter;
 import web.app.moldunity.model.filter.FilterMap;
 import web.app.moldunity.model.filter.FilterQuery;
+import web.app.moldunity.service.UserService;
 import web.app.moldunity.service.data.ReactiveDataManager;
 
 import java.time.LocalDate;
@@ -115,50 +115,39 @@ public class AdService {
         log.debug("Params: {}", fq.params());
         log.debug("SQL: {}", sql);
 
-        return execute
+        Mono<List<Ad>> ads = execute
                 .bind("limit", limit)
                 .bind("offset", limit * (Math.max(page, 1L) - 1))
                 .map(((row, rowMetadata) -> Ad.mapRowToAd(row)))
                 .all()
-                .collectList()
-                .flatMap(ads -> {
-                    if (ads.isEmpty()) {
-                        return Mono.just(new AdPage(List.of(), 0L, page));
-                    }
+                .collectList();
 
-                    List<Long> adIds = ads.stream().map(Ad::getId).toList();
+        Mono<Long> count = countExec
+                .bindValues(fq.params())
+                .map((row, meta) -> row.get(0, Long.class))
+                .one();
 
-                    return dataManager.databaseClient().sql(String.format(
-                            """
-                            %1$s
-                            WHERE ad_id IN (:ids)
-                            """, baseSelectImages())
-                            )
-                            .bind("ids", adIds)
-                            .map((row, metadata) -> AdImage.mapRowToAdImage(row))
-                            .all()
-                            .collectList()
-                            .flatMap(images -> findFavoriteIds()
-                                    .flatMap(favoriteIds -> {
-                                        Map<Long, List<AdImage>> groupedImages = images.stream()
-                                                .collect(Collectors.groupingBy(AdImage::getAdId));
+        return createAdPage(ads, count, page);
+    }
 
-                                        List<AdWithImages> adWithImages = new ArrayList<>();
-                                        for (Ad ad : ads) {
-                                            adWithImages.add(new AdWithImages(
-                                                    ad,
-                                                    groupedImages.getOrDefault(ad.getId(), List.of()),
-                                                    favoriteIds.contains(ad.getId())));
-                                        }
-                                        Mono<Long> count = countExec
-                                                .bindValues(fq.params())
-                                                .map((row, meta) -> row.get(0, Long.class))
-                                                .one();
+    public Mono<AdPage> createAdPage(Mono<List<Ad>> ads, Mono<Long> count, Long page){
+        Mono<List<AdWithImages>> adWithImages = createAdsWithImagesFromAds(ads);
 
-                                        return Mono.zip(Mono.just(adWithImages), count)
-                                                .map(tuple -> new AdPage(tuple.getT1(), tuple.getT2(), page));
-                                    }));
-                });
+        return Mono.zip(adWithImages, count)
+                .map(t -> new AdPage(t.getT1(), t.getT2(), page));
+    }
+
+    public Mono<List<AdImage>> findAdImagesByAdIds(List<Long> adIds){
+        return dataManager.databaseClient().sql(String.format(
+                        """
+                        %1$s
+                        WHERE ad_id IN (:ids)
+                        """, baseSelectImages())
+                )
+                .bind("ids", adIds)
+                .map((row, metadata) -> AdImage.mapRowToAdImage(row))
+                .all()
+                .collectList();
     }
 
     public <S extends Subcategory> Mono<AdDetails> save(AdDetails adDetails, Class<S> subcategoryType) {
@@ -261,18 +250,24 @@ public class AdService {
                 });
     }
 
-    public Flux<AdWithImages> findByUsername(String username){
+    public Mono<List<AdWithImages>> findByUsername(String username){
         String sql = selectAdsWithImages() +
                 """
                 WHERE ads.username = :username
+                ORDER BY ads.republished_at DESC;
                 """;
 
-        return findAdsWithImagesByCondition(dataManager.databaseClient().sql(sql)
-                .bind("username", username));
+        Mono<List<Ad>> ads = dataManager.databaseClient().sql(sql)
+                .bind("username", username)
+                .map((row, rowMetadata) -> Ad.mapRowToAd(row))
+                .all()
+                .collectList();
+
+        return createAdsWithImagesFromAds(ads);
     }
 
     public Mono<List<AdWithImages>> getByUsername(String username) {
-        return findByUsername(username).collectList();
+        return findByUsername(username);
     }
 
     public Mono<Long> getCountAdsByUsername(String username) {
@@ -361,42 +356,28 @@ public class AdService {
                 });
     }
 
-    private String selectAdsWithImages(){
+    public String selectAdsWithImages(){
         return String.format("""
                 %1$s
                 LEFT JOIN ad_images ON ad_images.ad_id = ads.id
                 """, baseSelectAdsWithImages());
     }
 
-    private Flux<AdWithImages> findAdsWithImagesByCondition(DatabaseClient.GenericExecuteSpec executeSpec) {
-        return executeSpec.map((row, metadata) -> {
-                    Ad ad = Ad.mapRowToAd(row);
-                    AdImage adImage = AdImage.mapRowToAdImage(row);
-                    return new AdWithImage(ad, adImage);
-                })
-                .all()
-                .collectMultimap(a -> a.ad().getId())
-                .flatMapMany(map -> Flux.fromIterable(map.entrySet()))
-                .map(entry -> {
-                    List<AdWithImage> adWithImages = new ArrayList<>(entry.getValue());
-                    Ad ad = adWithImages.get(0).ad();
+    public Mono<List<AdWithImages>> createAdsWithImagesFromAds(Mono<List<Ad>> ads) {
+        return ads.flatMap(adsList -> {
+            List<Long> adIds = adsList.stream().map(Ad::getId).toList();
 
-                    List<AdImage> images = entry.getValue().stream()
-                            .map(AdWithImage::adImage)
-                            .filter(adImage -> adImage.getId() != null && adImage.getUrl() != null)
-                            .toList();
+            Mono<List<AdImage>> adImages = findAdImagesByAdIds(adIds);
 
-                    return new AdWithImages(ad, images, false);
-                })
-                .flatMap(a -> isFavorite(a.ad().getId())
-                        .map(result -> new AdWithImages(a.ad(), a.adImages(), result)))
-                .onErrorResume(e -> {
-                    log.error("Error fetching Ads: {}", e.getMessage(), e);
-                    return Flux.error(new AdServiceException("Failed to fetch Ads"));
-                });
+            Mono<List<Long>> favoriteIds = findFavoriteIds();
+
+            return Mono.zip(ads, adImages, favoriteIds)
+                    .map(t -> t.getT1().stream()
+                            .map(ad -> new AdWithImages(ad, t.getT2(), t.getT3().contains(ad.getId()))).toList());
+        });
     }
 
-    private String baseSelectAdsWithImages(){
+    public String baseSelectAdsWithImages(){
         return """
                 SELECT ads.id AS ads_id, ads.username, ads.offer_type, ads.title, ads.category_name, ads.subcategory_name,
                    ads.country, ads.location, ads.description, ads.price, ads.created_at AS ads_created_at, ads.updated_at,
@@ -407,7 +388,7 @@ public class AdService {
                 """;
     }
 
-    private String baseSelectAds(){
+    public String baseSelectAds(){
         return """
                 SELECT ads.id AS ads_id, ads.username, ads.offer_type, ads.title, ads.category_name, ads.subcategory_name,
                    ads.country, ads.location, ads.description, ads.price, ads.created_at AS ads_created_at, ads.updated_at,
@@ -416,7 +397,7 @@ public class AdService {
                 """;
     }
 
-    private String baseSelectImages(){
+    public String baseSelectImages(){
         return """
                 SELECT
                 ad_images.id AS ad_images_id, ad_images.url AS ad_images_url,
